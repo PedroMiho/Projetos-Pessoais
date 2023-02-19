@@ -81,7 +81,6 @@
        margin-left: 50px ;
     }
     
-
     div.containerMain{
         width: 80vw;
         flex-direction: column;
@@ -133,8 +132,10 @@
         width: 65vw; 
         margin-bottom: 20px; 
     }
+
     #tabela{
         margin: auto;
+        width: 100vw;
     }
 
     #resultadoIMC{
