@@ -77,10 +77,6 @@
     div#imagem{
         display: none;
     }
-
-    body{
-        overflow-x: hidden;
-    }
    
     header{
         margin-left: 50px;
@@ -97,11 +93,7 @@
         margin: auto;
     }
 
-    .calculoImc{
-        display: block;
-        width: 100vw;
-        margin-top: 30px;
-    }
+
 
     
     div#saude{
@@ -147,7 +139,6 @@
     .rodape {
         display: block;
         padding: 1em;
-        width: calc(100vw - 1rem);
     }
 
     .redes-sociais__lista {
