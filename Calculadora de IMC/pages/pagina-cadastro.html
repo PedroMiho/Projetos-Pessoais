@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-Br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastre-se</title> 
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;700&family=Montserrat:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.css"
+        integrity="sha512-IJEbgDEF7OeKJRa0MY2PApnyJHRIsgzCveek4ec8VWQ+7KG3ZSKVNYa5xP/Gh0hVP0Mwb+gBsk+GwR3JQGhQNg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
+    <link rel="stylesheet" href="../estilos/style.css">
+    <link rel="stylesheet" href="../estilos/formulario.css">
+    <link rel="stylesheet" href="../estilos/mediaQuery.css">
+</head>
+<body>
+    <header class="header">
+        
+        <div id="logo">
+            <div id="imagem"> </div>
+            <p id="texto">CUIDE DA SUA <br> SAUDE</p>
+        </div>
+
+
+        <nav id="nav" data-nav>
+        <button id="btn-mobile" aria-label="Abrir Menu" aria-controls="menu" aria-haspopup="true" aria-expanded="false" data-botao-media>
+            <span id="hamburguer"></span>
+        </button>
+        
+            <ul id="menu" role="menu">
+                <li><a href="../index.html">HOME</a></li>
+                <li><a href="#">CADASTRE-SE</a></li>
+                <li><a href="#">FALE CONOSCO</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <h1 class="titulo-formulario"> Preencha os campos <br> abaixo  para se <br> cadastrar</h1>
+            
+        <div id="formulario-geral" >
+    
+            <form action="" data-formulario>
+                <fieldset class="campo-formulario">
+                    <label class="campo-label"  for="nome">Nome</label>
+                    <input required class="formulario-cadastro" type="text" id="nome" minlength="3" >
+                </fieldset>
+    
+                <fieldset class="campo-formulario">
+                    <label class="campo-label"  for="email">E-mail</label>
+                    <input required class="formulario-cadastro" type="email" name="" id="email" >
+                </fieldset>
+    
+                <fieldset class="campo-formulario">
+                    <label class="campo-label"  for="cpf">CPF (apenas numeros)</label>
+                    <input required class="formulario-cadastro" type="text" id="cpf"  minlength="11" maxlength="11" data-cpf>
+                    <p class="valor-invalido" data-cpf-valido></p>
+                </fieldset>
+                
+                <fieldset class="campo-formulario">
+                    <label class="campo-label"  for="cep">CEP (apenas numeros)</label>
+                    <input required class="formulario-cadastro" type="text" id="cep"  minlength="8" maxlength="8" data-cep>
+                    <p class="valor-invalido" data-cep-valido></p>
+                </fieldset>
+
+                <fieldset class="campo-formulario">
+                    <label class="campo-label"  for="rua">Rua</label>
+                    <input required class="formulario-cadastro" type="text" id="rua"  disabled data-rua>
+                </fieldset>
+
+                <fieldset class="campo-formulario">
+                    <label class="campo-label"  for="numero">Numero</label>
+                    <input required class="formulario-cadastro" type="text" id="numero" >
+                </fieldset>
+
+                <fieldset class="campo-formulario">
+                    <label class="campo-label"  for="bairro">Bairro</label>
+                    <input required class="formulario-cadastro" type="text" id="bairro"  disabled data-bairro>
+                </fieldset>
+
+                <fieldset class="campo-formulario">
+                    <label class="campo-label"  for="cidade">Cidade</label>
+                    <input required class="formulario-cadastro" type="text" id="cidade" disabled data-cidade>
+                </fieldset>
+
+                <fieldset class="campo-formulario">
+                    <label class="campo-label"  for="estado">Estado</label>
+                    <input required class="formulario-cadastro" type="text" id="estado" disabled data-estado>
+                </fieldset>
+             
+                <fieldset class="campo-formulario">
+                    <label class="campo-label"  for="senha">Senha</label>
+                    <input required class="formulario-cadastro" type="password" id="senha" >
+                </fieldset>
+
+
+                <fieldset class="termos-formulario" >
+                    <input required name="termos" class="input-termos" type="checkbox" >
+                    <p class="termos__texto"> Li e estou ciente quanto às condições de tratamento dos meus dados conforme descrito na Política de Privacidade do banco.</p>
+                </fieldset>
+    
+                <input type="submit" class="botao-envia-formulario"  value="Enviar" data-botao-formulario>
+
+            </form>
+        </div>
+    </main>
+
+    <footer class="rodape">
+        <section class="rodape__empresa">
+            <h2 class="rodape__titulo">Projeto portfolio</h2>
+            <ul class="rodape__lista">
+                <li>
+                    <a href="#" class="rodape__link">Sobre</a>
+                </li>
+                <li>
+                    <a href="#" class="rodape__link">Perguntas frequentes</a>
+                </li>
+                <li>
+                    <a href="#" class="rodape__link">Carreira</a>
+                </li>
+            </ul>
+        </section>
+
+        <section class="rodape__contato">
+            <h2 class="rodape__titulo">Contato</h2>
+            <ul class="rodape__lista">
+                <li>
+                    <a href="#" class="rodape__link">+55 (11) 95067-6738</a>
+                </li>
+                <li>
+                    <a href="#" class="rodape__link">pedromihosoza@gmail.com</a>
+                </li>
+
+            </ul>
+        </section>
+        <section class="rodape__redes-sociais">
+            <h2 class="rodape__titulo">Acesse nossas redes</h2>
+            <ul class="rodape__lista redes-sociais__lista">
+                <li><img src="../imagens/Facebook.png" alt="ícone do facebook"></li>
+                <li><img src="../imagens/Youtube.png" alt="ícone do youtube"></li>
+                <li><img src="../imagens/Whatsapp.png" alt="ícone do whatsapp"></li>
+                <li><img src="../imagens/Instagram.png" alt="ícone do instagram"></li>
+            </ul>
+            <h2 class="rodape__logo"><span class="rodape__logo--negrito">Projeto</span> Portfolio</h2>
+        </section>
+    </footer>
+
+    <script src="../js/validandoCEP.js"></script>
+    <script src="../js/validandoCPF.js"></script>
+    <script src="../js/enviandoFormulario.js"></script>
+    <script src="../js/mediaQuery.js"></script>
+    
+</body>
+</html>

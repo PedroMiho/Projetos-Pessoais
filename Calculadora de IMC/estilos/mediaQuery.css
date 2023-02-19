@@ -1,0 +1,153 @@
+
+@media (max-width: 1000px) {
+
+    #menu{
+        display: block;
+        position: absolute;
+        width: 100vw;
+        top: 40vh;
+        right: 0px;
+        background-image: linear-gradient(to left, #abd7e6d0, white);
+        height: 0px;
+        z-index: 1000;
+        transition: 0.6s;
+        visibility: hidden;
+        overflow-y: hidden;
+    }
+
+    #nav.active #menu{
+        height: calc(80vh - 40vh);
+        visibility: visible;
+    }
+
+    #menu a{
+        padding: 1rem 0;
+        margin: 0 2rem;
+        border-bottom: 2px solid rgba(0, 0, 0, .05);
+    }
+
+    #btn-mobile{
+        display: flex;
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+        border: none;
+        background: none;
+        cursor: pointer;
+    }
+
+    #hamburguer{
+        width: 20px;
+        border-top: 2px solid;
+        color: #0a42a3;
+    }
+
+    #hamburguer::after, #hamburguer::before{
+        display: block;
+        content: '';
+        width: 20px;
+        height: 2px;
+        background-color: currentColor;
+        margin-top: 5px;
+        transition: 0.3s;
+        position: relative;
+    }
+
+    #nav.active #hamburguer{
+        border-top-color: transparent;
+    }
+    #nav.active #hamburguer::before{
+        transform: rotate(135deg);
+
+    }
+
+    #nav.active #hamburguer::after{
+        transform: rotate(-135deg);
+        top: -7px;
+    }
+}
+
+@media screen and (min-width: 500px) and (max-width: 770px){
+
+    div#imagemBalanca{
+        margin: auto;
+        width: 85vw;
+        height: 70vh;
+    }
+
+    div.containerMain{
+        width: 80vw;
+        flex-direction: column;
+    }
+
+    div.itemFilhoDoMain{
+        width: 80vw;
+        margin-bottom: 20px;
+        margin: auto;
+    }
+
+    .calculoImc{
+        display: block;
+        width: 80vw;
+        margin-top: 30px;
+    }
+
+    #subTitulo-tabela{
+        display: block;
+        width: 70vw;
+        font-size: 1.2em;
+        font-weight: bolder;
+        margin: auto;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    
+    div#saude{
+        display: none;
+    }
+
+    #form{
+        width: 33vw;
+        margin: auto;
+    }
+
+    #enviar{
+        margin: auto;
+    }
+
+    .botao-formulario{
+        display: block;
+        margin: auto;
+        margin-bottom: 5px;
+        width: 100px;
+    }
+    #subTitulo-tabela{
+        margin: auto; 
+        width: 65vw; 
+        margin-bottom: 20px; 
+    }
+    #tabela{
+        margin: auto;
+    }
+
+    #resultadoIMC{
+        margin: auto;
+        margin-top: 20px;
+
+    }
+}
+
+@media screen and (max-width: 798px) {
+    .rodape {
+        display: block;
+        padding: 1em;
+    }
+
+    .redes-sociais__lista {
+        display: block;
+    }
+
+    .rodape__lista li {
+        display: inline-block;
+        margin: 1rem 1rem;
+    }
+}

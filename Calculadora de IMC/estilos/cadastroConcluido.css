@@ -1,0 +1,118 @@
+
+:root {
+    --cor-de-fundo: #EBECEE;
+    --branco: #FFFFFF;
+    --laranja: #EB9B00;
+    --azul-degrade: linear-gradient(97.54deg, #002F52 35.49%, #326589 165.37%);
+    --fonte-principal: "Poppins";
+    --azul: #002F52;
+    --fonte-secundario: "Josefin Sans";
+    --preto: #000000;
+    --cinza: #474646;
+    --cinza-claro: #858585;
+    --vermelho: #D94937;
+}
+
+body {
+    background-color: white;
+    font-size: 16px;
+    font-weight: 400;
+    height: 150vh;
+}
+
+.principal {
+    width: 50vw;
+    margin: 5em auto 6em auto;
+    height: 70vh;
+}
+
+.principal__titulo {
+    font-family: var(--fonte-principal);
+    font-style: normal;
+    font-weight: 700;
+    font-size: 26px;
+    color: #0F4DBC;
+}
+
+.principal__subtitulo {
+    font-weight: 700;
+    font-family: var(--fonte-secundario);
+    font-size: 17px;
+    line-height: 26px;
+    color: var(--azul);
+    margin: 3em 0 2em 0;
+}
+
+.campo__etiqueta {
+    display: block;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 24px;
+    color: var(--azul);
+    margin-left: 1em;
+}
+
+.campo__escrita {
+    border: 1px solid var(--azul);
+    border-radius: 24px;
+    padding: 1em;
+    width: 100%;
+}
+
+.formulario__campo {
+    margin: .6em 3em .6em 0;
+
+}
+
+.formulario__dupla {
+    display: flex;
+}
+
+.formulario__botao {
+    background: var(--laranja);
+    padding: 1em 4em;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 30px;
+    border: none;
+    color: var(--branco);
+    cursor: pointer;
+    float: right;
+}
+
+.formulario__erro {
+    display: flex;
+    margin-top: .5em;
+    align-items: center;
+}
+
+.erro__imagem {
+    width: 16px;
+    height: 16px;
+    margin: 0 .5em;
+    background-image: url('../img/warning.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.erro__texto {
+    font-size: 12px;
+    line-height: 18px;
+    color: var(--vermelho);
+}
+
+.cadastro {
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+    padding: 2em;
+    background-color: #FFFFFF;
+}
+
+.cadastro__imagem {
+    display: block;
+    margin: 3em auto 0 auto;
+}
+
+.cadastro__subtitulo {
+    margin: 1em 0;
+}

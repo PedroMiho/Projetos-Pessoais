@@ -1,0 +1,55 @@
+.titulo-formulario{
+    text-align: center;
+    font-family: 'Courier New', Courier, monospace;
+    color: #0F4DBC;
+    font-weight: bolder;
+    font-size: 2em;
+}
+
+#formulario-geral{
+    margin: auto;
+    width: 30vw;
+}
+
+.formulario-cadastro{
+    width: 30vw;
+    height: 6vh;
+    border: 3px solid #0F4DBC;
+    border-radius: 20px;
+    text-indent: 20px;
+    margin: auto;
+}
+
+.campo-label{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 1.2em;
+    margin: 5px 0px;
+}
+
+.termos__texto{
+    display: inline;
+    margin: auto;
+}
+
+.termos-formulario{
+    width: 30vw;
+    margin: auto;
+    text-align: justify;
+    margin-left: 20px;
+    border: none;
+}
+
+.botao-envia-formulario{
+    display: block;
+    width: 170px;
+    padding: 10px;
+    color: white;
+    background-color:#ff5100;
+    border: none;
+    border-radius: 15px;
+    margin: auto;
+    font-size: 1.4em;
+    font-weight: bolder;
+    cursor: pointer;
+    margin-top: 20px;
+}

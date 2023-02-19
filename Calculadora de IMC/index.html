@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="pt-Br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de IMC</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;700&family=Montserrat:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.css"
+        integrity="sha512-IJEbgDEF7OeKJRa0MY2PApnyJHRIsgzCveek4ec8VWQ+7KG3ZSKVNYa5xP/Gh0hVP0Mwb+gBsk+GwR3JQGhQNg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
+    <link rel="stylesheet" href="./estilos/style.css">
+    <link rel="stylesheet" href="./estilos/mediaQuery.css">
+</head>
+<body>
+    <header class="header">
+        
+        <div id="logo">
+            <div id="imagem"> </div>
+            <p id="texto">CUIDE DA SUA <br> SAUDE</p>
+        </div>
+
+
+        <nav id="nav" data-nav>
+        <button id="btn-mobile" aria-label="Abrir Menu" aria-controls="menu" aria-haspopup="true" aria-expanded="false" data-botao-media>
+            <span id="hamburguer"></span>
+        </button>
+        
+            <ul id="menu" role="menu">
+                <li><a href="#">HOME</a></li>
+                <li><a href="pages/pagina-cadastro.html">CADASTRE-SE</a></li>
+                <li><a href="#">FALE CONOSCO</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div id="imagemBalanca"></div>
+
+        <section>
+            <h1 class="titulo">TUDO SOBRE IMC</h1>
+
+            <div class="containerMain">
+                <div class="itemFilhoDoMain">
+                    <h2 class="sub-titulo-main">O QUE É IMC</h2>
+
+                    <p class = "paragrafoMain">O IMC é um cálculo simples que permite avaliar se a pessoa está dentro do peso que é considerado ideal para a sua altura.</p>
+
+                    <p class = "paragrafoMain">Também conhecido como Índice de Massa Corporal, o IMC é uma fórmula utilizada por vários profissionais de saúde, incluindo médicos, enfermeiros e nutricionistas, para saber, de uma forma rápida, se a pessoa precisa ganhar ou perder peso.</p>
+
+                    <p class = "paragrafoMain">Embora seja uma ferramenta muito comum, o IMC não é considerado a forma mais exata de avaliar o peso, já que não leva em consideração a composição corporal. Por isso, é comum que no caso de atletas (que possuem uma maior quantidade de massa muscular) seja aconselhado o uso de outras técnicas, como a bioimpedância, para uma avaliação mais detalhada do peso</p>
+                </div>
+
+                <div class="itemFilhoDoMain"> 
+                    <h2 class="sub-titulo-main">COMO CALCULAR O IMC</h2>
+
+                    <p class="paragrafoMain">O IMC é reconhecido como padrão internacional para avaliar o grau de sobrepeso e obesidade. É calculado dividindo o peso (em kg) pela altura ao quadrado (em metros).</p>
+
+                    <div id="imagemIMC"></div>
+                </div>
+            </div>
+
+
+
+            <h1 class="titulo">CALCULE O SEU IMC</h1>
+            
+            <div  class="containerMain">
+                
+                <div class="itemFilhoDoMain" >
+
+                    <h2 class="sub-titulo-main">COLOQUE SEUS DADOS</h2>
+                    
+                    <div id="form">
+    
+                        <form>
+                            <fieldset class="campo-formulario">
+                                <label class="label-formulario" for="altura">Altura (ex: 1.70)</label>
+                                <input type="text" class="input-formulario" name="altura" id="altura" placeholder="Altura" data-altura>
+                                <p class="valor-invalido" data-valor-altura></p>
+                            </fieldset>
+    
+    
+                            <fieldset class="campo-formulario">
+                                <label class="label-formulario" for="peso">Peso (ex: 37.60)</label>
+                                <input type="text" class="input-formulario" name="peso" id="peso" placeholder="Peso" data-peso>
+                                <p class="valor-invalido" data-valor-peso></p>
+                            </fieldset>
+    
+                            <div id="enviar">
+                                <input type="submit" class="botao-formulario" value="Calcular" data-botao>
+                                <input type="submit" class="botao-formulario botao-laranja"  value="Limpar" data-botao>
+                            </div>
+    
+                        </form>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="itemFilhoDoMain" id="saude">
+                        
+                        <h2 class="sub-titulo-main">COMO CUIDAR DA SUA SAUDE</h2>
+                        
+                        <p class="paragrafoMain">Na busca pela integridade mental e física, é fundamental readaptar o corpo a uma rotina saudável e se concentrar, totalmente, na conquista de novos hábitos, focando sempre no bem-estar geral. Cuidar da saúde é uma atitude que deve ser tomada, diariamente, para evitar doenças e, claro, para manter uma vida mais equilibrada.</p>
+
+                        <p class="paragrafoMain">No entanto, muitas vezes, devido à rotina cada vez mais agitada, as pessoas acabam se esquecendo do cuidado que deveriam ter com a saúde. Por isso, é preciso mudar a atitude, os costumes diários e aplicar algumas dicas no dia a dia para ter uma vida mais saudável.</p>
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="calculoImc">
+                <div>
+                    
+                    <table id="tabela" class="table-calc">
+                        
+                        <h2 id="subTitulo-tabela">CLASSIFICAÇÃO DO SEU IMC</h2>
+                        <thead>
+                            <tr id="titulo-tabela">
+                                <td colspan="3" id="celula-titulo-tabela">VEJA A INTEPRETAÇÃO DO SEU IMC</td>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                        
+                            <tr class="linhas-tabela">
+                                <td>IMC</td>
+                                <td>CLASSIFICAÇÃO</td>
+                                <td>OBESIDADE(GRAU)</td>
+                            </tr>
+                                            
+
+                            <tr class="linhas-tabela" data-linha>
+                                <td>MENOR QUE 18,5</td>
+                                <td data-tabela>MAGREZA</td>
+                                <td>0</td>
+                            </tr>
+
+                            <tr class="linhas-tabela" data-linha>
+                                <td>ENTRE 18,5 E 24,9</td>
+                                <td data-tabela>NORMAL</td>
+                                <td>0</td>
+                            </tr>
+
+                            <tr class="linhas-tabela" data-linha>
+                                <td>ENTRE 25,0 E 29,9</td>
+                                <td data-tabela>SOBREPESO</td>
+                                <td>I</td>
+                            </tr>
+
+                            <tr class="linhas-tabela" data-linha>
+                                <td>ENTRE 30,0 E 39,9</td>
+                                <td data-tabela>OBESIDADE</td>
+                                <td>II</td>
+                            </tr>
+
+                            <tr class="linhas-tabela" data-linha>
+                                <td>MAIOR QUE 40</td>
+                                <td data-tabela>OBESIDADE GRAVE</td>
+                                <td>III</td>
+                            </tr>
+
+                        </tbody>
+                        
+                    </table>     
+                    
+                    
+                    <p id="resultadoIMC" data-imc>SEU IMC É DE </p>
+                    
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="rodape">
+        <section class="rodape__empresa">
+            <h2 class="rodape__titulo">Projeto portfolio</h2>
+            <ul class="rodape__lista">
+                <li>
+                    <a href="#" class="rodape__link">Sobre</a>
+                </li>
+                <li>
+                    <a href="#" class="rodape__link">Fale Conosco</a>
+                </li>
+                <li>
+                    <a href="#" class="rodape__link">Carreira</a>
+                </li>
+            </ul>
+        </section>
+
+        <section class="rodape__contato">
+            <h2 class="rodape__titulo">Contato</h2>
+            <ul class="rodape__lista">
+                <li>
+                    <a href="#" class="rodape__link">+55 (11) 95067-6738</a>
+                </li>
+                <li>
+                    <a href="#" class="rodape__link">pedromihosoza@gmail.com</a>
+                </li>
+
+            </ul>
+        </section>
+        <section class="rodape__redes-sociais">
+            <h2 class="rodape__titulo">Acesse nossas redes</h2>
+            <ul class="rodape__lista redes-sociais__lista">
+                <li><img src="./imagens/Facebook.png" alt="ícone do facebook"></li>
+                <li><img src="./imagens/Youtube.png" alt="ícone do youtube"></li>
+                <li><img src="./imagens/Whatsapp.png" alt="ícone do whatsapp"></li>
+                <li><img src="./imagens/Instagram.png" alt="ícone do instagram"></li>
+            </ul>
+            <h2 class="rodape__logo"><span class="rodape__logo--negrito">Projeto</span> Portfolio</h2>
+        </section>
+    </footer>
+
+    <script src="./js/main.js"></script>
+    <script src="./js/mediaQuery.js"></script>
+</body>
+</html>

@@ -1,0 +1,306 @@
+:root {
+    --fonte-principal: 'Montserrat', sans-serif;
+    --fonte-logo: 'Inter', sans-serif;
+    --azul-claro: #6BD1FF;
+    --preto: #000000;
+    --branco: #FFFFFF;
+}
+
+*{
+    margin: 0px;
+    padding: 0px;
+}
+
+a{
+    color: #0F4DBC;
+    text-decoration: none;
+    font-family: sans-serif;
+}
+
+a:hover{
+    background: rgba(0, 0, 0, .05);
+}
+
+div#logo{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-left: -3rem;
+}
+
+div#imagem{
+    display: block;
+    background-image: url(../imagens/coraçãoAzuk-removebg-preview.png);
+    background-repeat: no-repeat;
+    height: 185px;
+    width: 250px;
+}
+
+p#texto{
+    font-size: 2.5em;
+    font-weight: bolder;
+    text-align: center;
+    color: #0F4DBC;
+    font-family: monospace;
+}
+
+header{
+    box-sizing: border-box;
+    height: 40vh;
+    padding: 1rem;
+    background-image: linear-gradient(to left, #abd7e6d0, white);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#menu{
+    display: flex;
+    list-style: none;
+    gap: 0.5rem;
+}
+
+#menu a{
+    display: block;
+    padding: 0.3rem;
+    margin: 0 1rem;
+    font-weight: bolder;
+    font-size: 1.2em;
+}
+
+#btn-mobile{
+    display: none;
+}
+
+/*Inicio do Main*/
+
+main{
+    background-color: white;
+    width: 80vw;
+    margin: auto;
+    margin-top: 10px;
+}
+
+div#imagemBalanca{
+    display: block;
+    background-image: url(../imagens/imagemAposCbecalho.png);
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    width: 70vw;
+    margin: auto;
+    height: 70vh;
+    margin-bottom: 40px;
+}
+
+/*Primeiras Informação*/
+h1.titulo{
+    text-align: center;
+    font-size: 1.5em;
+    margin-top: 30px;
+    color: #0c2f6b;
+    font-weight: bolder;
+
+}
+
+h2.sub-titulo-main{
+    margin-top: 30px;
+    font-size: 1em;
+    font-weight: bolder;
+}
+
+div.containerMain{
+    display: flex;
+    flex-direction: row;
+    width: 70vw;
+    margin: auto;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+div.itemFilhoDoMain{
+    width: 30vw;
+}
+
+p.paragrafoMain{
+    text-align: justify;
+    margin-top: 10px;
+    text-indent: 20px;
+}
+
+div#imagemIMC{
+    display: block;
+    background-image: url(../imagens/formulaImc-removebg-preview.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    width: 30vw;
+    margin: auto;
+    height: 15vh;
+    margin-top: 20px;
+}
+
+/*Segunda Informação*/
+
+fieldset.campo-formulario{
+    display: flex;
+    flex-direction: column;
+    margin: 20px;
+    border: none;
+}
+
+label.label-formulario{
+    font-size: 0.9em;
+}
+
+input.input-formulario{
+    width: 200px;
+    height: 30px;
+    border-radius: 10px;
+    text-indent: 10px;
+    border: 2.5px solid #1F5EAF;
+}
+
+.botao-formulario{
+    width: 10vw;
+    height: 40px;
+    color: white;
+    background-color: #176bdb;
+    border: none;
+    border-radius: 15px;
+    margin-right: 40px;
+}
+
+.botao-formulario:hover{
+    cursor: pointer;
+    background-color: #095ac4;
+}
+
+.botao-laranja{
+    background-color:#ff5100;
+}
+
+.botao-laranja:hover{
+    background-color:#b83d04;
+}
+
+/*Terceira Informação*/
+
+.calculoImc{
+    display: flex;
+    flex-direction: row;
+    margin: auto;
+    margin-bottom: 20px;
+    justify-content: flex-start;
+    width: 65vw;
+    margin-top: 30px;
+}
+
+
+#subTitulo-tabela{
+    display: block;
+    width: 80vw;
+    font-size: 1.2em;
+    font-weight: bolder;
+    margin-bottom: 20px;
+}
+
+tbody{
+    display: table-row-group;
+    vertical-align: inherit;
+}
+
+tr{
+    vertical-align: inherit;
+
+}
+
+table#tabela{
+    margin-top: 10px;
+    width: 40vw;
+    height: 40vh;
+    border-collapse: collapse;
+}
+
+
+tr#titulo-tabela{
+    background-color: #074eaa;
+    color: white;
+}
+
+tr#titulo-tabela > td{
+    padding: 10px;
+    border-radius: 10px;
+}
+
+#celula-titulo-tabela{
+    border: none;
+}
+
+td{
+    text-align: center;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.274);
+    padding: 10px;
+}
+
+#resultadoIMC{
+    margin: 25px 0px;
+    width: 180px;
+    background-color: #ff5100;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    border-radius: 25px;
+    font-weight: bolder;
+    font-size: 1.2em;
+}
+
+.valor-invalido{
+    color: #074eaa;
+}
+
+/*Inicio footer*/
+
+.rodape {
+    display: flex;
+    justify-content: space-around;
+    background-color: #095AC4;
+    color: var(--branco);
+    padding: 3em 0;
+    margin-top: 50px;
+}
+
+.redes-sociais__lista {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.rodape__titulo {
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 22px;
+}
+
+.rodape__lista li {
+    margin: 1em 0;
+}
+
+.rodape__link {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 20px;
+    text-decoration: none;
+    color: var(--branco);
+}
+
+.rodape__logo {
+    margin-top: .6em;
+    font-size: 28px;
+    line-height: 36px;
+}
+
+.rodape__logo--negrito {
+    font-weight: 700;
+}
+
