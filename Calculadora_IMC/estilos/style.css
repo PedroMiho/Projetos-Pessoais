@@ -33,7 +33,7 @@ div#imagem{
     background-image: url(../imagens/coraçãoAzuk-removebg-preview.png);
     background-repeat: no-repeat;
     height: 185px;
-    width: 250px;
+    width: 50vh;
 }
 
 p#texto{
