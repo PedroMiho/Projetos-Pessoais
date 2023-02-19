@@ -66,13 +66,21 @@
     }
 }
 
-@media screen and (min-width: 300px) and (max-width: 770px){
+@media screen and (min-width: 50px) and (max-width: 770px){
 
     div#imagemBalanca{
         margin: auto;
         width: 85vw;
         height: 70vh;
     }
+
+    div#imagem{
+        display: none;
+    }
+    p#texto{
+       margin-left: 50px ;
+    }
+    
 
     div.containerMain{
         width: 80vw;
