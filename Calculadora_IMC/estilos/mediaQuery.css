@@ -77,8 +77,13 @@
     div#imagem{
         display: none;
     }
-    p#texto{
-       margin-left: 50px ;
+
+    body{
+        overflow-x: hidden;
+    }
+   
+    header{
+        margin-left: 50px;
     }
     
     div.containerMain{
@@ -98,15 +103,6 @@
         margin-top: 30px;
     }
 
-    #subTitulo-tabela{
-        display: block;
-        width: 70vw;
-        font-size: 1.2em;
-        font-weight: bolder;
-        margin: auto;
-        text-align: center;
-        margin-bottom: 20px;
-    }
     
     div#saude{
         display: none;
@@ -140,6 +136,11 @@
         margin-top: 20px;
 
     }
+
+    #resultadoIMC{
+        margin: 25px 0px;
+    }
+    
 }
 
 @media screen and (max-width: 798px) {
