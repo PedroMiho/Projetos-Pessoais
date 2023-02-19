@@ -198,9 +198,9 @@ input.input-formulario{
 
 
 #subTitulo-tabela{
-    display: block;
-    width: 80vw;
     font-size: 1.2em;
+    margin: auto;
+    text-align: center;
     font-weight: bolder;
     margin-bottom: 20px;
 }
@@ -217,7 +217,7 @@ tr{
 
 table#tabela{
     margin-top: 10px;
-    width: 40vw;
+    width: 10vw;
     height: 40vh;
     border-collapse: collapse;
 }

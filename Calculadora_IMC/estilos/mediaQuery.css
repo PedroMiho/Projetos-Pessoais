@@ -94,7 +94,7 @@
 
     .calculoImc{
         display: block;
-        width: 80vw;
+        width: 100vw;
         margin-top: 30px;
     }
 
@@ -128,14 +128,11 @@
         width: 100px;
     }
     #subTitulo-tabela{
+        display: block;
+        text-align: center;
         margin: auto; 
-        width: 65vw; 
+        width: 10vw;
         margin-bottom: 20px; 
-    }
-
-    #tabela{
-        margin: auto;
-        width: 100vw;
     }
 
     #resultadoIMC{
