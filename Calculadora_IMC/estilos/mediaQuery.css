@@ -148,6 +148,7 @@
     .rodape {
         display: block;
         padding: 1em;
+        width: calc(100vw - 1rem);
     }
 
     .redes-sociais__lista {
