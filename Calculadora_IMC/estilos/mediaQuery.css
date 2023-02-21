@@ -67,6 +67,9 @@
 
 @media screen and (min-width: 50px) and (max-width: 770px){
 
+    body{
+        overflow-x: hidden;
+    }
     div#imagemBalanca{
         margin: auto;
         width: 80vw;
