@@ -241,6 +241,7 @@ td{
     text-align: center;
     border-bottom: 1px solid rgba(0, 0, 0, 0.274);
     padding: 10px;
+    font-size: 1em;
 }
 
 #resultadoIMC{

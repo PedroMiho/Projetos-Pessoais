@@ -20,6 +20,7 @@ function pegaValores(botao){
     if(botao == 'Limpar'){
         peso.value = ''
         altura.value = ''
+        valorIMC.innerHTML = 'SEU IMC É DE'
         const linhasTabela = document.querySelectorAll('[data-linha]')
         linhasTabela.forEach(elemento => elemento.style.backgroundColor = "white")
     }
