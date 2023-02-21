@@ -70,7 +70,6 @@
     body{
         overflow-x: hidden;
     }
-    
     div#imagemBalanca{
         margin: auto;
         width: 80vw;
@@ -121,6 +120,12 @@
         margin: auto; 
         width: 10vw;
         margin-bottom: 20px; 
+    }
+
+    .sub-titulo-main{
+        display: block;
+        text-align: center;
+        margin: auto;
     }
 
     #resultadoIMC{
