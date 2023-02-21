@@ -144,9 +144,31 @@
         padding: 10px;
         font-size: 0.7em;
     }
+
     input.input-formulario{
+        display: flex;
+        flex-direction: row;
+        margin: auto;
+        justify-content: center;
+        align-items: center;
         width: 150px;
         height: 30px;
+    }
+
+    .calculoImc{
+        display: flex;
+        flex-direction: row;
+        margin: auto;
+        margin-bottom: 20px;
+        justify-content: center;
+        width: 65vw;
+        align-items: center;
+        margin-top: 30px;
+    }
+
+    #resultadoIMC{
+        margin: auto;
+        margin-top: 25px;
     }
     
 }
