@@ -1,4 +1,3 @@
-
 @media (max-width: 1000px) {
 
     #menu{
@@ -92,9 +91,6 @@
         margin-bottom: 20px;
         margin: auto;
     }
-
-
-
     
     div#saude{
         display: none;
@@ -131,6 +127,16 @@
 
     #resultadoIMC{
         margin: 25px 0px;
+    }
+    td{
+        text-align: center;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.274);
+        padding: 10px;
+        font-size: 0.7em;
+    }
+    #calculoImc{
+        display: block;
+        margin-right: 15px;
     }
     
 }

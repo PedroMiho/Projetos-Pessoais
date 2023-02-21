@@ -17,13 +17,13 @@ body {
     background-color: white;
     font-size: 16px;
     font-weight: 400;
-    height: 150vh;
+    height: 170vh;
 }
 
 .principal {
     width: 50vw;
     margin: 5em auto 6em auto;
-    height: 70vh;
+    height: 85vh;
 }
 
 .principal__titulo {
@@ -111,8 +111,11 @@ body {
 .cadastro__imagem {
     display: block;
     margin: 3em auto 0 auto;
+    width: 35vw;
+    height: 45vh;
 }
 
 .cadastro__subtitulo {
     margin: 1em 0;
 }
+
