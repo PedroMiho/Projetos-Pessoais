@@ -4,10 +4,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pacientes</title>
+  <title>Profissionais</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" />
   <style>
+    /* Faz o body ocupar 100% e distribui espaço entre main e footer */
     html,
     body {
       height: 100%;
@@ -18,6 +19,7 @@
 
     main {
       flex: 1;
+      /* ocupa todo espaço disponível, empurrando o footer */
     }
 
     body {
@@ -95,15 +97,9 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav w-100">
-            <li class="nav-item">
-              <a class="nav-link text-white fs-5" href="profissionais.html">Profissionais</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-white active fs-5" aria-current="page" href="pacientes.html">Pacientes</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-white fs-5" href="telaLogin.html">Área de Estudos</a>
-            </li>
+            <li class="nav-item"><a class="nav-link text-white active fs-5" href="#">Profissionais</a></li>
+            <li class="nav-item"><a class="nav-link text-white fs-5" href="pacientes.html">Pacientes</a></li>
+            <li class="nav-item"><a class="nav-link text-white fs-5" href="telaLogin.html">Área de Estudos</a></li>
             <li class="nav-item ms-auto">
               <a class="nav-link text-white d-flex align-items-center fs-5" href="telaLogin.html">
                 <i class="bi bi-person-circle me-1"></i> Login
@@ -118,35 +114,49 @@
   <!-- Main -->
   <main>
     <div class="container py-5">
-      <h2 class="text-center mb-4">Pacientes</h2>
+      <h2 class="text-center mb-4">Profissionais</h2>
 
-      <!-- Card 1 -->
-      <div class="card-custom">
-        <div class="card-left">
-          <img src="" alt="Foto Paciente">
-          <h5>Maria Silva</h5>
-          <p>Psicopedagoga</p>
-        </div>
-        <div class="card-right">
-          <p class="info-item"><strong>Telefone:</strong> (11) 99999-9999</p>
-          <p class="info-item"><strong>E-mail:</strong> maria.silva@example.com</p>
-          <p class="info-item"><strong>Dificuldades:</strong> Dificuldades de aprendizagem</p>
-        </div>
-      </div>
 
-      <!-- Card 2 -->
-      <div class="card-custom">
-        <div class="card-left">
-          <img src="" alt="Foto Paciente">
-          <h5>João Pereira</h5>
-          <p>Neuropsicopedagogo</p>
-        </div>
-        <div class="card-right">
-          <p class="info-item"><strong>Telefone:</strong> (21) 98888-8888</p>
-          <p class="info-item"><strong>E-mail:</strong> joao.pereira@example.com</p>
-          <p class="info-item"><strong>Dificuldades:</strong> Dificuldades de aprendizagem</p>
-        </div>
-      </div>
+      <?php
+      try {
+        include("../../back-end/conexao.php");
+
+        $sql = "SELECT * FROM profissionais";
+        $stmt = $conn->prepare($sql);
+        if ($stmt) {
+          $stmt->execute();
+          $resultado = $stmt->get_result();
+
+          if ($resultado->num_rows > 0) {
+            while ($row = $resultado->fetch_assoc()) {
+              $telefone = $row['telefone']; // Ex: 22222222222
+
+              // Formata para (22) 22222-2222
+              $telefoneFormatado = preg_replace('/(\d{2})(\d{5})(\d{4})/', '($1) $2-$3', $telefone);
+              echo "
+                  <div class='card-custom'>
+                    <div class='card-left'>
+                      <img src='' alt='Coletar'>
+                      <h5>{$row['nome']}</h5>
+                      <p>Coletar</p>
+                    </div>
+                    <div class='card-right'>
+                      <p class='info-item'><strong>Telefone:</strong> {$telefoneFormatado} </p>
+                      <p class='info-item'><strong>E-mail:</strong> {$row['email']}</p>
+                      <p class='info-item'><strong>Especialização:</strong> Coletar</p>
+                    </div>
+                  </div>
+                
+                ";
+            }
+          }
+        }
+      } catch (mysqli_sql_exception $e) {
+      }
+
+
+
+      ?>
     </div>
   </main>
 
