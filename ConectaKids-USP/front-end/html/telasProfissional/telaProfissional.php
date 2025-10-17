@@ -41,7 +41,6 @@ if (!empty($usuario['foto_perfil'])) { // garante que a coluna correta é usada
     $foto_path = $possible;
   }
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -69,6 +68,21 @@ if (!empty($usuario['foto_perfil'])) { // garante que a coluna correta é usada
       background-color: #f5f2f0;
       border: none;
       border-radius: 15px;
+    }
+
+    .fade-out {
+      animation: fadeOut 0.5s ease-in-out forwards;
+    }
+
+    @keyframes fadeOut {
+      from {
+        opacity: 1;
+      }
+
+      to {
+        opacity: 0;
+        display: none;
+      }
     }
   </style>
 </head>
@@ -102,6 +116,15 @@ if (!empty($usuario['foto_perfil'])) { // garante que a coluna correta é usada
   <!-- Conteúdo do Perfil -->
   <main class="py-5">
     <div class="container">
+
+      <!-- ✅ Exibe a mensagem de atualização -->
+      <?php if (isset($_SESSION['mensagem'])): ?>
+        <div id="mensagem" class="text-center mb-4">
+          <?= $_SESSION['mensagem']; ?>
+        </div>
+        <?php unset($_SESSION['mensagem']); ?>
+      <?php endif; ?>
+
       <h2 class="fw-bold mb-4 text-center" style="color: #3e2723">Meu Perfil</h2>
       <div class="row justify-content-center">
         <div class="col-md-8">
@@ -152,7 +175,6 @@ if (!empty($usuario['foto_perfil'])) { // garante que a coluna correta é usada
                     </select>
                   </div>
 
-
                   <div class="mb-3">
                     <label class="form-label fw-bold">Descrição</label>
                     <textarea class="form-control" name="descricao" rows="4"><?= htmlspecialchars($usuario['descricao'] ?? '') ?></textarea>
@@ -164,7 +186,7 @@ if (!empty($usuario['foto_perfil'])) { // garante que a coluna correta é usada
                   </div>
                 <?php endif; ?>
 
-                <!-- campo oculto para enviar id e tipo ao atualizar (útil no atualizarPerfil.php) -->
+                <!-- campo oculto para enviar id e tipo ao atualizar -->
                 <input type="hidden" name="usuario_id" value="<?= htmlspecialchars($id) ?>">
                 <input type="hidden" name="usuario_tipo" value="<?= htmlspecialchars($tipo) ?>">
 
@@ -194,6 +216,15 @@ if (!empty($usuario['foto_perfil'])) { // garante que a coluna correta é usada
         foto.src = URL.createObjectURL(event.target.files[0]);
       }
     }
+
+    // Remove a mensagem após 3 segundos
+    setTimeout(() => {
+      const msg = document.getElementById('mensagem');
+      if (msg) {
+        msg.classList.add('fade-out');
+        setTimeout(() => msg.remove(), 500);
+      }
+    }, 3000);
   </script>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
