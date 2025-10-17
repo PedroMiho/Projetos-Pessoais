@@ -15,10 +15,24 @@ if (!isset($_SESSION['usuario_id']) || !isset($_SESSION['usuario_tipo'])) {
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
   <style>
+    /* Estrutura geral da página */
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+
     body {
+      display: flex;
+      flex-direction: column;
       background-color: #fff8f5;
     }
 
+    main {
+      flex: 1; /* ocupa o espaço restante empurrando o footer para baixo */
+      padding-bottom: 40px; /* evita que o conteúdo encoste no footer */
+    }
+
+    /* Estilo das cards */
     .card-opcao {
       transition: all 0.3s ease-in-out;
       border: none;
@@ -54,8 +68,21 @@ if (!isset($_SESSION['usuario_id']) || !isset($_SESSION['usuario_tipo'])) {
       color: #4e342e;
     }
 
+    /* Footer */
     footer {
-      margin-top: 80px;
+      background-color: #3e2723;
+      color: white;
+      padding-top: 20px;
+      padding-bottom: 20px;
+    }
+
+    footer a {
+      color: white;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
@@ -132,85 +159,48 @@ if (!isset($_SESSION['usuario_id']) || !isset($_SESSION['usuario_tipo'])) {
     </div>
   </main>
 
-  <footer class="text-white pt-5 pb-3" style="background-color: #3e2723">
-      <div class="container">
-        <div class="row justify-content-between align-items-start text-center">
-          <!-- Sobre -->
-          <div class="col-md-4 mb-4">
-            <h5 class="fw-bold">Sobre Nós</h5>
-            <p class="small">
-              Nosso propósito é conectar crianças e famílias a profissionais
-              especializados, promovendo cuidado, desenvolvimento e inclusão de
-              forma acessível e humanizada.
-            </p>
-          </div>
-
-          <!-- Links Úteis (centralizado) -->
-          <div
-            class="col-md-4 mb-4 d-flex flex-column align-items-center text-center"
-          >
-            <h5 class="fw-bold">Links Úteis</h5>
-            <ul class="list-unstyled small">
-              <li>
-                <a href="index.html" class="text-white text-decoration-none"
-                  >Início</a
-                >
-              </li>
-              <li>
-                <a href="html/pacientes.php" class="text-white text-decoration-none"
-                  >Pacientes</a
-                >
-              </li>
-              <li>
-                <a
-                  href="html/profissionais.php"
-                  class="text-white text-decoration-none"
-                  >Profissionais</a
-                >
-              </li>
-       
-            </ul>
-          </div>
-
-          <!-- Redes Sociais -->
-          <div class="col-md-4 mb-4">
-            <h5 class="fw-bold">Redes Sociais</h5>
-            <p class="small">Acompanhe nossas novidades e conteúdos:</p>
-            <a
-              href="https://instagram.com/seuInstagram"
-              target="_blank"
-              class="text-white me-3"
-            >
-              <i class="bi bi-instagram fs-4"></i>
-            </a>
-            <a
-              href="https://facebook.com/seuFacebook"
-              target="_blank"
-              class="text-white me-3"
-            >
-              <i class="bi bi-facebook fs-4"></i>
-            </a>
-            <a
-              href="https://wa.me/seuNumero"
-              target="_blank"
-              class="text-white"
-            >
-              <i class="bi bi-whatsapp fs-4"></i>
-            </a>
-          </div>
-        </div>
-
-        <!-- Linha separadora -->
-        <hr class="border-light" />
-
-        <!-- Direitos -->
-        <div class="text-center small">
-          <p class="mb-0">
-            © 2025 Espaço Escuta - Todos os direitos reservados.
+  <!-- Footer -->
+  <footer class="text-center">
+    <div class="container">
+      <div class="row justify-content-between align-items-start text-center">
+        <!-- Sobre -->
+        <div class="col-md-4 mb-4">
+          <h5 class="fw-bold">Sobre Nós</h5>
+          <p class="small">
+            Nosso propósito é conectar crianças e famílias a profissionais
+            especializados, promovendo cuidado, desenvolvimento e inclusão de
+            forma acessível e humanizada.
           </p>
         </div>
+
+        <!-- Links Úteis -->
+        <div class="col-md-4 mb-4 d-flex flex-column align-items-center text-center">
+          <h5 class="fw-bold">Links Úteis</h5>
+          <ul class="list-unstyled small">
+            <li><a href="index.html">Início</a></li>
+            <li><a href="html/pacientes.php">Pacientes</a></li>
+            <li><a href="html/profissionais.php">Profissionais</a></li>
+          </ul>
+        </div>
+
+        <!-- Redes Sociais -->
+        <div class="col-md-4 mb-4">
+          <h5 class="fw-bold">Redes Sociais</h5>
+          <p class="small">Acompanhe nossas novidades e conteúdos:</p>
+          <a href="https://instagram.com/seuInstagram" target="_blank" class="me-3"><i class="bi bi-instagram fs-4"></i></a>
+          <a href="https://facebook.com/seuFacebook" target="_blank" class="me-3"><i class="bi bi-facebook fs-4"></i></a>
+          <a href="https://wa.me/seuNumero" target="_blank"><i class="bi bi-whatsapp fs-4"></i></a>
+        </div>
       </div>
-    </footer>
+
+      <hr class="border-light" />
+
+      <div class="text-center small">
+        <p class="mb-0">© 2025 Espaço Escuta - Todos os direitos reservados.</p>
+      </div>
+    </div>
+  </footer>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
