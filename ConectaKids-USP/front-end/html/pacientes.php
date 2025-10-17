@@ -88,7 +88,7 @@
   <header>
     <nav class="navbar navbar-expand-lg" style="background-color: #6d4c41">
       <div class="container-fluid">
-        <a class="navbar-brand text-white fw-bold fs-5" href="index.html">ConectaKids</a>
+        <a class="navbar-brand text-white fw-bold fs-5" href="../index.html">ConectaKids</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
           aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -96,16 +96,16 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav w-100">
             <li class="nav-item">
-              <a class="nav-link text-white fs-5" href="profissionais.html">Profissionais</a>
+              <a class="nav-link text-white fs-5" href="profissionais.php">Profissionais</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-white active fs-5" aria-current="page" href="pacientes.html">Pacientes</a>
+              <a class="nav-link text-white active fs-5" aria-current="page" href="pacientes.php">Pacientes</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-white fs-5" href="telaLogin.html">Área de Estudos</a>
+              <a class="nav-link text-white fs-5" href="telaLogin.php">Área de Estudos</a>
             </li>
             <li class="nav-item ms-auto">
-              <a class="nav-link text-white d-flex align-items-center fs-5" href="telaLogin.html">
+              <a class="nav-link text-white d-flex align-items-center fs-5" href="telaLogin.php">
                 <i class="bi bi-person-circle me-1"></i> Login
               </a>
             </li>
@@ -159,46 +159,85 @@
     </div>
   </main>
 
-  <!-- Footer -->
-  <footer class="text-white pt-5 pb-3" style="background-color: #3e2723">
-    <div class="container">
-      <div class="row justify-content-between align-items-start text-center">
-        <div class="col-md-4 mb-4">
-          <h5 class="fw-bold">Sobre Nós</h5>
-          <p class="small">Nosso propósito é conectar crianças e famílias a profissionais especializados,
-            promovendo cuidado, desenvolvimento e inclusão de forma acessível e humanizada.</p>
+<footer class="text-white pt-5 pb-3" style="background-color: #3e2723">
+      <div class="container">
+        <div class="row justify-content-between align-items-start text-center">
+          <!-- Sobre -->
+          <div class="col-md-4 mb-4">
+            <h5 class="fw-bold">Sobre Nós</h5>
+            <p class="small">
+              Nosso propósito é conectar crianças e famílias a profissionais
+              especializados, promovendo cuidado, desenvolvimento e inclusão de
+              forma acessível e humanizada.
+            </p>
+          </div>
+
+          <!-- Links Úteis (centralizado) -->
+          <div
+            class="col-md-4 mb-4 d-flex flex-column align-items-center text-center"
+          >
+            <h5 class="fw-bold">Links Úteis</h5>
+            <ul class="list-unstyled small">
+              <li>
+                <a href="../index.html" class="text-white text-decoration-none"
+                  >Início</a
+                >
+              </li>
+              <li>
+                <a href="pacientes.php" class="text-white text-decoration-none"
+                  >Pacientes</a
+                >
+              </li>
+              <li>
+                <a
+                  href="profissionais.php"
+                  class="text-white text-decoration-none"
+                  >Profissionais</a
+                >
+              </li>
+       
+            </ul>
+          </div>
+
+          <!-- Redes Sociais -->
+          <div class="col-md-4 mb-4">
+            <h5 class="fw-bold">Redes Sociais</h5>
+            <p class="small">Acompanhe nossas novidades e conteúdos:</p>
+            <a
+              href="https://instagram.com/seuInstagram"
+              target="_blank"
+              class="text-white me-3"
+            >
+              <i class="bi bi-instagram fs-4"></i>
+            </a>
+            <a
+              href="https://facebook.com/seuFacebook"
+              target="_blank"
+              class="text-white me-3"
+            >
+              <i class="bi bi-facebook fs-4"></i>
+            </a>
+            <a
+              href="https://wa.me/seuNumero"
+              target="_blank"
+              class="text-white"
+            >
+              <i class="bi bi-whatsapp fs-4"></i>
+            </a>
+          </div>
         </div>
 
-        <div class="col-md-4 mb-4 d-flex flex-column align-items-center text-center">
-          <h5 class="fw-bold">Links Úteis</h5>
-          <ul class="list-unstyled small">
-            <li><a href="index.html" class="text-white text-decoration-none">Início</a></li>
-            <li><a href="pacientes.html" class="text-white text-decoration-none">Pacientes</a></li>
-            <li><a href="profissionais.html" class="text-white text-decoration-none">Profissionais</a></li>
-            <li><a href="contato.html" class="text-white text-decoration-none">Contato</a></li>
-          </ul>
-        </div>
+        <!-- Linha separadora -->
+        <hr class="border-light" />
 
-        <div class="col-md-4 mb-4">
-          <h5 class="fw-bold">Redes Sociais</h5>
-          <p class="small">Acompanhe nossas novidades e conteúdos:</p>
-          <a href="https://instagram.com/seuInstagram" target="_blank" class="text-white me-3">
-            <i class="bi bi-instagram fs-4"></i>
-          </a>
-          <a href="https://facebook.com/seuFacebook" target="_blank" class="text-white me-3">
-            <i class="bi bi-facebook fs-4"></i>
-          </a>
-          <a href="https://wa.me/seuNumero" target="_blank" class="text-white">
-            <i class="bi bi-whatsapp fs-4"></i>
-          </a>
+        <!-- Direitos -->
+        <div class="text-center small">
+          <p class="mb-0">
+            © 2025 Espaço Escuta - Todos os direitos reservados.
+          </p>
         </div>
       </div>
-      <hr class="border-light" />
-      <div class="text-center small">
-        <p class="mb-0">© 2025 Espaço Escuta - Todos os direitos reservados.</p>
-      </div>
-    </div>
-  </footer>
+    </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>

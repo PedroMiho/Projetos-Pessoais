@@ -55,7 +55,7 @@ $valueSenha = $_COOKIE['senha'] ?? '';
   <header>
     <nav class="navbar navbar-expand-lg" style="background-color: #6d4c41">
       <div class="container-fluid">
-        <a class="navbar-brand text-white fw-bold fs-5" href="index.html">ConectaKids</a>
+        <a class="navbar-brand text-white fw-bold fs-5" href="../index.html">ConectaKids</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
           aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -63,13 +63,13 @@ $valueSenha = $_COOKIE['senha'] ?? '';
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav w-100">
             <li class="nav-item">
-              <a class="nav-link text-white fs-5" href="profissionais.html">Profissionais</a>
+              <a class="nav-link text-white fs-5" href="profissionais.php">Profissionais</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-white fs-5" href="pacientes.html">Pacientes</a>
+              <a class="nav-link text-white fs-5" href="pacientes.php">Pacientes</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-white fs-5" href="#">Área de Estudos</a>
+              <a class="nav-link text-white fs-5" href="telaLogin.php">Área de Estudos</a>
             </li>
             <li class="nav-item ms-auto">
               <a class="nav-link text-white d-flex align-items-center fs-5 active" href="telaLogin.php">
