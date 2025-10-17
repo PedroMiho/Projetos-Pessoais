@@ -7,7 +7,7 @@ $tempoExpiracaoSessao = 30 * 60; // 30 minutos
 
 // ====== VERIFICA SE USUÁRIO JÁ ESTÁ LOGADO ======
 if (isset($_SESSION['usuario_id'])) {
-    header("Location: telaProfissional.php");
+    header("Location: telasProfissional/telaProfissional.php");
     exit();
 }
 
@@ -43,7 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             setcookie("senha", $senha, time() + (7 * 24 * 60 * 60), "/");
         }
 
-        header("Location: telaProfissional.php");
+        header("Location: telasProfissional/telaProfissional.php");
         exit();
     }
 
@@ -66,7 +66,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             setcookie("senha", $senha, time() + (7 * 24 * 60 * 60), "/");
         }
 
-        header("Location: telaProfissional.php");
+        header("Location: telasProfissional/telaProfissional.php");
         exit();
     }
 

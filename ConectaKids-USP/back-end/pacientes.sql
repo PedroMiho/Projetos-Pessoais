@@ -1,4 +1,4 @@
-CREATE TABLE profissionais (
+CREATE TABLE pacientes (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
     sobrenome VARCHAR(100) NOT NULL,
