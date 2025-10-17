@@ -1,0 +1,270 @@
+<?php
+session_start();
+
+// Função para verificar login via sessão ou cookie
+function estaLogado() {
+    if(isset($_SESSION['usuario_id'])) {
+        return true;
+    } elseif(isset($_COOKIE['usuario_id'])) {
+        include("conexao.php");
+        $usuario_id = $_COOKIE['usuario_id'];
+        $sql = "SELECT id, nome FROM usuarios WHERE id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $usuario_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if($result->num_rows === 1){
+            $row = $result->fetch_assoc();
+            $_SESSION['usuario_id'] = $row['id'];
+            $_SESSION['usuario_nome'] = $row['nome'];
+            return true;
+        }
+    }
+    return false;
+}
+
+// Decide o link da Área de Estudos
+$linkEstudos = estaLogado() ? "html/telasAreaEstudo/areaEstudo.php" : "html/telaLogin.php";
+?>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tela Home</title>
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    crossorigin="anonymous"
+  />
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
+  />
+</head>
+<body>
+  <!-- Header da página -->
+  <header>
+    <nav class="navbar navbar-expand-lg" style="background-color: #6d4c41">
+      <div class="container-fluid">
+        <a class="navbar-brand text-white fw-bold fs-5" href="#">ConectaKids</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav w-100">
+            <!-- Links à esquerda -->
+            <li class="nav-item">
+              <a class="nav-link text-white active fs-5" aria-current="page" href="html/profissionais.php">Profissionais</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-white fs-5" href="html/pacientes.php">Pacientes</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-white fs-5" href="<?php echo $linkEstudos; ?>">Área de Estudos</a>
+            </li>
+            <!-- Login à direita -->
+            <li class="nav-item ms-auto">
+              <?php if(estaLogado()): ?>
+                <a class="nav-link text-white d-flex align-items-center fs-5" href="painel.php">
+                  <i class="bi bi-person-circle me-1"></i> <?php echo $_SESSION['usuario_nome']; ?>
+                </a>
+              <?php else: ?>
+                <a class="nav-link text-white d-flex align-items-center fs-5" href="html/telaLogin.php">
+                  <i class="bi bi-person-circle me-1"></i> Login
+                </a>
+              <?php endif; ?>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Seção de apresentação -->
+    <section class="py-5" style="background-color: #efebe9">
+      <div class="container text-center">
+        <h2 class="fw-bold mb-5" style="color: #3e2723">
+          No ConectaKids, seu filho recebe <br />
+          cuidado e atenção especial.
+        </h2>
+        <div class="row g-4">
+          <!-- Card 1 -->
+          <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0">
+              <img src="imagens/Psicoterapia Infantil.png" class="card-img-top" alt="Psicoterapia Infantil" />
+              <div class="card-body" style="background-color: #f5f2f0">
+                <h5 class="card-title fw-bold" style="color: #6d4c41">Psicoterapia Infantil</h5>
+                <p class="card-text text-muted">
+                  Atendimento com escuta ativa da criança e responsáveis,
+                  apoio ao desenvolvimento emocional e social, estratégias
+                  para comunicação e autoestima.
+                </p>
+              </div>
+            </div>
+          </div>
+          <!-- Card 2 -->
+          <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0">
+              <img src="imagens/Psicopedagogia.png" class="card-img-top" alt="Psicopedagogia" />
+              <div class="card-body" style="background-color: #f5f2f0">
+                <h5 class="card-title fw-bold" style="color: #6d4c41">Psicopedagogia</h5>
+                <p class="card-text text-muted">
+                  Identificação e apoio nas dificuldades de aprendizagem,
+                  incluindo alfabetização, organização, concentração e
+                  acompanhamento de TDAH.
+                </p>
+              </div>
+            </div>
+          </div>
+          <!-- Card 3 -->
+          <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0">
+              <img src="imagens/Neuropsicopedagogia.png" class="card-img-top" alt="Neuropsicopedagogia" />
+              <div class="card-body" style="background-color: #f5f2f0">
+                <h5 class="card-title fw-bold" style="color: #6d4c41">Neuropsicopedagogia</h5>
+                <p class="card-text text-muted">
+                  Atua na compreensão do funcionamento cognitivo, emocional e
+                  social da criança, auxiliando no diagnóstico e nas
+                  estratégias de aprendizagem de forma integrada.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Seção Principais Abordagens -->
+    <section class="py-5" style="background-color: #ede7e3">
+      <div class="container text-center">
+        <h2 class="fw-bold mb-5" style="color: #3e2723">Principais Abordagens</h2>
+        <div class="row g-4">
+          <!-- Card 1 -->
+          <div class="col-md-6 col-lg-3">
+            <div class="card h-100 shadow-sm border-0">
+              <img src="imagens/Terapia Cognitivo Comportamental.png" class="card-img-top" alt="Terapia Cognitivo Comportamental" />
+              <div class="card-body" style="background-color: #f5f2f0">
+                <h5 class="card-title fw-bold" style="color: #6d4c41">Terapia Cognitivo-Comportamental</h5>
+                <p class="card-text text-muted">
+                  Auxilia na modificação de pensamentos e comportamentos,
+                  promovendo autoestima e confiança, além de ser eficaz contra
+                  ansiedade e depressão.
+                </p>
+              </div>
+            </div>
+          </div>
+          <!-- Card 2 -->
+          <div class="col-md-6 col-lg-3">
+            <div class="card h-100 shadow-sm border-0">
+              <img src="imagens/Psicanálise.png" class="card-img-top" alt="Psicanálise" />
+              <div class="card-body" style="background-color: #f5f2f0">
+                <h5 class="card-title fw-bold" style="color: #6d4c41">Psicanálise</h5>
+                <p class="card-text text-muted">
+                  Baseada na escuta da criança e de sua família, ajuda a
+                  compreender demandas emocionais e sociais, favorecendo o
+                  desenvolvimento psíquico e relacional.
+                </p>
+              </div>
+            </div>
+          </div>
+          <!-- Card 3 -->
+          <div class="col-md-6 col-lg-3">
+            <div class="card h-100 shadow-sm border-0">
+              <img src="imagens/ABA.png" class="card-img-top" alt="ABA" />
+              <div class="card-body" style="background-color: #f5f2f0">
+                <h5 class="card-title fw-bold" style="color: #6d4c41">ABA (Análise do Comportamento)</h5>
+                <p class="card-text text-muted">
+                  Estimula habilidades comunicativas e sociais por meio da
+                  imitação, atenção compartilhada e brincadeiras funcionais,
+                  promovendo autonomia.
+                </p>
+              </div>
+            </div>
+          </div>
+          <!-- Card 4 -->
+          <div class="col-md-6 col-lg-3">
+            <div class="card h-100 shadow-sm border-0">
+              <img src="imagens/1e9cd91e-e49a-471d-88cd-d667e3bd9b60.webp" class="card-img-top" alt="Gestalt-terapia" />
+              <div class="card-body" style="background-color: #f5f2f0">
+                <h5 class="card-title fw-bold" style="color: #6d4c41">Gestalt-terapia</h5>
+                <p class="card-text text-muted">
+                  Atendimento personalizado que acolhe a criança e a família,
+                  criando um ambiente de confiança para favorecer o
+                  crescimento emocional e social.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Seção escolha do usuário -->
+    <section class="py-5" style="background-color: #fff8f5">
+      <div class="container text-center">
+        <h2 class="fw-bold mb-4" style="color: #3e2723">Para quem você procura atendimento?</h2>
+        <p class="text-muted mb-5">Escolha abaixo a opção que melhor se encaixa no seu perfil.</p>
+        <div class="row g-4 justify-content-center">
+          <!-- Div Paciente -->
+          <div class="col-md-6">
+            <a href="html/pacientes.php" class="text-decoration-none">
+              <div class="p-5 rounded-4 shadow-sm h-100" style="background-color: #f5f2f0; transition: transform 0.3s ease, box-shadow 0.3s ease;">
+                <h3 class="fw-bold" style="color: #6d4c41">Sou Paciente</h3>
+                <p class="text-muted">Acesse informações, recursos e profissionais para auxiliar no seu desenvolvimento.</p>
+              </div>
+            </a>
+          </div>
+          <!-- Div Profissional -->
+          <div class="col-md-6">
+            <a href="html/profissionais.php" class="text-decoration-none">
+              <div class="p-5 rounded-4 shadow-sm h-100" style="background-color: #f5f2f0; transition: transform 0.3s ease, box-shadow 0.3s ease;">
+                <h3 class="fw-bold" style="color: #6d4c41">Sou Profissional</h3>
+                <p class="text-muted">Cadastre-se e tenha acesso a um painel exclusivo para acompanhar seus atendimentos.</p>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="text-white pt-5 pb-3" style="background-color: #3e2723">
+    <div class="container">
+      <div class="row justify-content-between align-items-start text-center">
+        <!-- Sobre -->
+        <div class="col-md-4 mb-4">
+          <h5 class="fw-bold">Sobre Nós</h5>
+          <p class="small">Nosso propósito é conectar crianças e famílias a profissionais especializados, promovendo cuidado, desenvolvimento e inclusão de forma acessível e humanizada.</p>
+        </div>
+        <!-- Links úteis -->
+        <div class="col-md-4 mb-4 d-flex flex-column align-items-center text-center">
+          <h5 class="fw-bold">Links Úteis</h5>
+          <ul class="list-unstyled small">
+            <li><a href="index.php" class="text-white text-decoration-none">Início</a></li>
+            <li><a href="html/pacientes.php" class="text-white text-decoration-none">Pacientes</a></li>
+            <li><a href="html/profissionais.php" class="text-white text-decoration-none">Profissionais</a></li>
+          </ul>
+        </div>
+        <!-- Redes sociais -->
+        <div class="col-md-4 mb-4">
+          <h5 class="fw-bold">Redes Sociais</h5>
+          <p class="small">Acompanhe nossas novidades e conteúdos:</p>
+          <a href="https://instagram.com/seuInstagram" target="_blank" class="text-white me-3"><i class="bi bi-instagram fs-4"></i></a>
+          <a href="https://facebook.com/seuFacebook" target="_blank" class="text-white me-3"><i class="bi bi-facebook fs-4"></i></a>
+          <a href="https://wa.me/seuNumero" target="_blank" class="text-white"><i class="bi bi-whatsapp fs-4"></i></a>
+        </div>
+      </div>
+      <hr class="border-light" />
+      <div class="text-center small">
+        <p class="mb-0">© 2025 Espaço Escuta - Todos os direitos reservados.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+</body>
+</html>

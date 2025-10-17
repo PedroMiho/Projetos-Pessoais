@@ -14,7 +14,7 @@ if (!empty($_SESSION)) {
 
 // ===== VERIFICA SE USUÁRIO JÁ ESTÁ LOGADO =====
 if (isset($_SESSION['usuario_id'])) {
-    header("Location: telasProfissional/telaProfissional.php");
+    header("Location: telasAreaEstudo/areaEstudo.php");
     exit();
 }
 
@@ -50,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             setcookie("usuario_id", $user['id'], time() + (7 * 24 * 60 * 60), "/", "", true, true);
         }
 
-        header("Location: telasProfissional/telaProfissional.php");
+        header("Location: telasAreaEstudo/areaEstudo.php");
         exit();
     }
 
@@ -66,7 +66,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             setcookie("usuario_id", $user['id'], time() + (7 * 24 * 60 * 60), "/", "", true, true);
         }
 
-        header("Location: telasProfissional/telaProfissional.php");
+        header("Location: telasAreaEstudo/areaEstudo.php");
         exit();
     }
 

@@ -92,7 +92,7 @@ if (!isset($_SESSION['usuario_id']) || !isset($_SESSION['usuario_tipo'])) {
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg" style="background-color: #6d4c41">
     <div class="container-fluid">
-      <a class="navbar-brand text-white fw-bold fs-5" href="#">ConectaKids</a>
+      <a class="navbar-brand text-white fw-bold fs-5" href="../../index.php">ConectaKids</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -102,7 +102,7 @@ if (!isset($_SESSION['usuario_id']) || !isset($_SESSION['usuario_tipo'])) {
           <li class="nav-item"><a class="nav-link text-white fs-5" href="../pacientes.php">Pacientes</a></li>
           <li class="nav-item"><a class="nav-link text-white fs-5" href="#">Área de Estudos</a></li>
           <li class="nav-item ms-auto">
-            <a class="nav-link text-white fs-5" href="../../logout.php">
+            <a class="nav-link text-white fs-5" href="logout.php">
               <i class="bi bi-box-arrow-right me-1"></i> Sair
             </a>
           </li>
@@ -148,7 +148,7 @@ if (!isset($_SESSION['usuario_id']) || !isset($_SESSION['usuario_tipo'])) {
 
         <!-- Acessar Perfil -->
         <div class="col-md-5 col-lg-3">
-          <div class="card card-opcao p-4 h-100" onclick="window.location.href='telaProfissional.php'">
+          <div class="card card-opcao p-4 h-100" onclick="window.location.href='../telasProfissional/telaProfissional.php'">
             <div class="icon-container"><i class="bi bi-person-circle"></i></div>
             <h5>Acessar Perfil</h5>
             <p>Veja e edite suas informações pessoais e profissionais.</p>

@@ -103,7 +103,7 @@ if (!empty($usuario['foto_perfil'])) { // garante que a coluna correta é usada
             <li class="nav-item"><a class="nav-link text-white fs-5" href="../pacientes.php">Pacientes</a></li>
             <li class="nav-item"><a class="nav-link text-white fs-5" href="#">Área de Estudos</a></li>
             <li class="nav-item ms-auto">
-              <a class="nav-link text-white fs-5" href="../../logout.php">
+              <a class="nav-link text-white fs-5" href="../telasAreaEstudo/logout.php">
                 <i class="bi bi-box-arrow-right me-1"></i> Sair
               </a>
             </li>
