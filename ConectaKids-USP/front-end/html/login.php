@@ -23,19 +23,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $email = trim($_POST['email']);
     $senha = trim($_POST['senha']);
 
-    // ===== FUNÇÃO PARA VERIFICAR USUÁRIO =====
+    // ===== FUNÇÃO PARA VERIFICAR USUÁRIO (SEM CRIPTOGRAFIA) =====
     function verificarUsuario($conn, $tabela, $email, $senha) {
-        $sql = "SELECT id, nome, senha FROM $tabela WHERE email = ?";
+        $sql = "SELECT id, nome, senha FROM $tabela WHERE email = ? AND senha = ?";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("s", $email);
+        $stmt->bind_param("ss", $email, $senha);
         $stmt->execute();
         $result = $stmt->get_result();
+
         if ($result->num_rows > 0) {
-            $user = $result->fetch_assoc();
-            if (password_verify($senha, $user['senha'])) {
-                return $user;
-            }
+            return $result->fetch_assoc();
         }
+
         return false;
     }
 
@@ -47,7 +46,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $_SESSION['usuario_tipo'] = 'profissional';
         $_SESSION['ultimo_acesso'] = time();
 
-        // Cookies seguros (somente ID do usuário)
         if (isset($_POST['lembrar'])) {
             setcookie("usuario_id", $user['id'], time() + (7 * 24 * 60 * 60), "/", "", true, true);
         }
