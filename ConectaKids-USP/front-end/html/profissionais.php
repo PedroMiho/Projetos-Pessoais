@@ -136,14 +136,14 @@
               echo "
                   <div class='card-custom'>
                     <div class='card-left'>
-                      <img src='' alt='Coletar'>
+                      <img src='telasProfissional/uploads/{$row['foto_perfil']}' alt='{$row['foto_perfil']}'>
                       <h5>{$row['nome']}</h5>
-                      <p>Coletar</p>
+                      <p>{$row['especialidade']}</p>
                     </div>
                     <div class='card-right'>
                       <p class='info-item'><strong>Telefone:</strong> {$telefoneFormatado} </p>
                       <p class='info-item'><strong>E-mail:</strong> {$row['email']}</p>
-                      <p class='info-item'><strong>Especialização:</strong> Coletar</p>
+                      <p class='info-item'><strong>Especialização:</strong> {$row['descricao']}</p>
                     </div>
                   </div>
                 

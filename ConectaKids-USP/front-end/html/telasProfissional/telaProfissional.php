@@ -32,18 +32,16 @@ if ($result->num_rows === 0) {
 
 $usuario = $result->fetch_assoc();
 
-// Caminho da foto (se existir)
-$foto_path = "../../imagens/usuario-default.png";
-if (!empty($usuario['foto'])) {
-  // ajuste caso suas fotos estejam em outra pasta (ex: ../../uploads/)
-  $possible = '../../uploads/' . $usuario['foto'];
+// Caminho da foto (corrigido)
+$foto_path = "uploads/usuario-default.png"; // imagem padrão
+
+if (!empty($usuario['foto_perfil'])) { // garante que a coluna correta é usada
+  $possible = "uploads/" . $usuario['foto_perfil'];
   if (file_exists($possible)) {
     $foto_path = $possible;
-  } else {
-    // se o nome armazenado já tiver path relativo, use direto
-    $foto_path = $usuario['foto'];
   }
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -81,14 +79,14 @@ if (!empty($usuario['foto'])) {
   <header>
     <nav class="navbar navbar-expand-lg" style="background-color: #6d4c41">
       <div class="container-fluid">
-        <a class="navbar-brand text-white fw-bold fs-5" href="#">ConectaKids</a>
+        <a class="navbar-brand text-white fw-bold fs-5" href="../../index.html">ConectaKids</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav w-100">
-            <li class="nav-item"><a class="nav-link text-white fs-5" href="../profissionais.html">Profissionais</a></li>
-            <li class="nav-item"><a class="nav-link text-white fs-5" href="../pacientes.html">Pacientes</a></li>
+            <li class="nav-item"><a class="nav-link text-white fs-5" href="../profissionais.php">Profissionais</a></li>
+            <li class="nav-item"><a class="nav-link text-white fs-5" href="../pacientes.php">Pacientes</a></li>
             <li class="nav-item"><a class="nav-link text-white fs-5" href="#">Área de Estudos</a></li>
             <li class="nav-item ms-auto">
               <a class="nav-link text-white fs-5" href="../../logout.php">
@@ -109,7 +107,7 @@ if (!empty($usuario['foto'])) {
         <div class="col-md-8">
           <div class="card shadow-sm border-0">
             <div class="card-body">
-              <form action="../../back-end/atualizarPerfil.php" method="POST" enctype="multipart/form-data">
+              <form action="atualizarPerfil.php" method="POST" enctype="multipart/form-data">
 
                 <div class="text-center mb-4">
                   <img src="<?= htmlspecialchars($foto_path) ?>" id="fotoPerfilPreview" class="foto-perfil" alt="Foto de perfil">
@@ -143,8 +141,17 @@ if (!empty($usuario['foto'])) {
                 <?php if ($tipo === 'profissional'): ?>
                   <div class="mb-3">
                     <label class="form-label fw-bold">Especialidade</label>
-                    <input type="text" class="form-control" name="especialidade" value="<?= htmlspecialchars($usuario['especialidade'] ?? '') ?>">
+                    <select class="form-select" name="especialidade" required>
+                      <option value="">Selecione sua especialidade</option>
+                      <option value="Psicopedagogo" <?= ($usuario['especialidade'] ?? '') === 'Psicopedagogo' ? 'selected' : '' ?>>
+                        Psicopedagogo
+                      </option>
+                      <option value="Neuropsicopedagogo" <?= ($usuario['especialidade'] ?? '') === 'Neuropsicopedagogo' ? 'selected' : '' ?>>
+                        Neuropsicopedagogo
+                      </option>
+                    </select>
                   </div>
+
 
                   <div class="mb-3">
                     <label class="form-label fw-bold">Descrição</label>
