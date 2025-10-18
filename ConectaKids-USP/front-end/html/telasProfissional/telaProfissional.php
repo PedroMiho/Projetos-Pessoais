@@ -93,7 +93,7 @@ if (!empty($usuario['foto_perfil'])) { // garante que a coluna correta é usada
   <header>
     <nav class="navbar navbar-expand-lg" style="background-color: #6d4c41">
       <div class="container-fluid">
-        <a class="navbar-brand text-white fw-bold fs-5" href="../../index.html">ConectaKids</a>
+        <a class="navbar-brand text-white fw-bold fs-5" href="../../index.php">ConectaKids</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
           <span class="navbar-toggler-icon"></span>
         </button>
