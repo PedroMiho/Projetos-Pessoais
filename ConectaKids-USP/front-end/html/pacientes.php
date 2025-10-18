@@ -1,36 +1,25 @@
 <?php
 session_start();
+include("../../back-end/conexao.php");
 
-// Função para verificar login via sessão ou cookie
-function estaLogado() {
-    if(isset($_SESSION['usuario_id'])) {
-        return true;
-    } elseif(isset($_COOKIE['usuario_id'])) {
-        include("../../back-end/conexao.php");
-        $usuario_id = $_COOKIE['usuario_id'];
-        $sql = "SELECT id, nome FROM usuarios WHERE id = ?";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("i", $usuario_id);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        if($result->num_rows === 1){
-            $row = $result->fetch_assoc();
-            $_SESSION['usuario_id'] = $row['id'];
-            $_SESSION['usuario_nome'] = $row['nome'];
-            return true;
-        }
-    }
-    return false;
+// Consulta pacientes
+try {
+  $sql = "SELECT nome, email, telefone, dificuldade, foto_perfil FROM pacientes";
+  $stmt = $conn->prepare($sql);
+  $stmt->execute();
+  $resultado = $stmt->get_result();
+} catch (mysqli_sql_exception $e) {
+  $resultado = false;
 }
 
-// Se não estiver logado, redireciona para a tela de login
-if(!estaLogado()){
-    header("Location: telaLogin.php");
-    exit();
-}
+// Verifica login
+$usuario_logado = isset($_SESSION['usuario_id']);
+$usuario_nome = $usuario_logado ? $_SESSION['usuario_nome'] : null;
 
-// Decide o link da Área de Estudos
-$linkEstudos = "telasAreaEstudo/areaEstudo.php";
+// Define link da área de estudos
+$linkEstudos = $usuario_logado
+  ? "telasAreaEstudo/areaEstudo.php"
+  : "telaLogin.php";
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -38,7 +27,7 @@ $linkEstudos = "telasAreaEstudo/areaEstudo.php";
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pacientes</title>
+  <title>Pacientes - ConectaKids</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" />
   <style>
@@ -48,12 +37,15 @@ $linkEstudos = "telasAreaEstudo/areaEstudo.php";
       display: flex;
       flex-direction: column;
     }
+
     main {
       flex: 1;
     }
+
     body {
       background-color: #ede7e3;
     }
+
     .card-custom {
       border: none;
       border-radius: 15px;
@@ -64,6 +56,7 @@ $linkEstudos = "telasAreaEstudo/areaEstudo.php";
       flex-direction: column;
       flex-wrap: wrap;
     }
+
     .card-left {
       background-color: #efebe9;
       display: flex;
@@ -74,6 +67,7 @@ $linkEstudos = "telasAreaEstudo/areaEstudo.php";
       text-align: center;
       flex: 1;
     }
+
     .card-left img {
       width: 150px;
       height: 150px;
@@ -82,6 +76,7 @@ $linkEstudos = "telasAreaEstudo/areaEstudo.php";
       border: 5px solid #fff;
       margin-bottom: 15px;
     }
+
     .card-right {
       background-color: #ffffff;
       color: #3c405c;
@@ -91,13 +86,16 @@ $linkEstudos = "telasAreaEstudo/areaEstudo.php";
       padding: 30px;
       flex: 2;
     }
+
     .card-right h5 {
       font-weight: bold;
       margin-bottom: 10px;
     }
+
     .info-item {
       margin-bottom: 8px;
     }
+
     @media (min-width: 768px) {
       .card-custom {
         flex-direction: row;
@@ -128,10 +126,18 @@ $linkEstudos = "telasAreaEstudo/areaEstudo.php";
             <li class="nav-item">
               <a class="nav-link text-white fs-5" href="<?php echo $linkEstudos; ?>">Área de Estudos</a>
             </li>
+
+            <!-- Verifica se há sessão -->
             <li class="nav-item ms-auto">
-              <a class="nav-link text-white d-flex align-items-center fs-5" href="painel.php">
-                <i class="bi bi-person-circle me-1"></i> <?php echo $_SESSION['usuario_nome']; ?>
-              </a>
+              <?php if ($usuario_logado): ?>
+                <a class="nav-link text-white d-flex align-items-center fs-5" href="painel.php">
+                  <i class="bi bi-person-circle me-1"></i> <?php echo htmlspecialchars($usuario_nome); ?>
+                </a>
+              <?php else: ?>
+                <a class="nav-link text-white d-flex align-items-center fs-5" href="telaLogin.php">
+                  <i class="bi bi-person-circle me-1"></i> Login
+                </a>
+              <?php endif; ?>
             </li>
           </ul>
         </div>
@@ -145,39 +151,32 @@ $linkEstudos = "telasAreaEstudo/areaEstudo.php";
       <h2 class="text-center mb-4">Pacientes</h2>
 
       <?php
-      try {
-        include("../../back-end/conexao.php");
+      if ($resultado && $resultado->num_rows > 0) {
+        while ($row = $resultado->fetch_assoc()) {
+          $telefone = $row['telefone'] ?? '';
+          $telefoneFormatado = preg_replace('/(\d{2})(\d{5})(\d{4})/', '($1) $2-$3', $telefone);
 
-        $sql = "SELECT * FROM pacientes";
-        $stmt = $conn->prepare($sql);
-        if ($stmt) {
-          $stmt->execute();
-          $resultado = $stmt->get_result();
+          // Exibe imagem de perfil se existir
+          $foto = !empty($row['foto_perfil']) && file_exists("uploads/" . $row['foto_perfil'])
+            ? "uploads/" . $row['foto_perfil']
+            : "../imagens/usuario-default.png";
 
-          if ($resultado->num_rows > 0) {
-            while ($row = $resultado->fetch_assoc()) {
-              $telefone = $row['telefone']; 
-              $telefoneFormatado = preg_replace('/(\d{2})(\d{5})(\d{4})/', '($1) $2-$3', $telefone);
-
-              echo "
-                  <div class='card-custom'>
-                    <div class='card-left'>
-                      <img src='' alt='Coletar'>
-                      <h5>{$row['nome']}</h5>
-                      <p>Coletar</p>
-                    </div>
-                    <div class='card-right'>
-                      <p class='info-item'><strong>Telefone:</strong> {$telefoneFormatado} </p>
-                      <p class='info-item'><strong>E-mail:</strong> {$row['email']}</p>
-                      <p class='info-item'><strong>Especialização:</strong> Coletar</p>
-                    </div>
-                  </div>
-                ";
-            }
-          }
+          echo "
+            <div class='card-custom'>
+              <div class='card-left'>
+                <img src='$foto' alt='Foto de {$row['nome']}'>
+                <h5>{$row['nome']}</h5>
+                <p class='text-muted'>{$row['dificuldade']}</p>
+              </div>
+              <div class='card-right'>
+                <p class='info-item'><strong>Telefone:</strong> {$telefoneFormatado}</p>
+                <p class='info-item'><strong>E-mail:</strong> {$row['email']}</p>
+              </div>
+            </div>
+          ";
         }
-      } catch (mysqli_sql_exception $e) {
-        echo "<p class='text-danger'>Erro ao carregar pacientes.</p>";
+      } else {
+        echo "<p class='text-center text-muted'>Nenhum paciente cadastrado ainda.</p>";
       }
       ?>
     </div>
@@ -185,32 +184,8 @@ $linkEstudos = "telasAreaEstudo/areaEstudo.php";
 
   <!-- Footer -->
   <footer class="text-white pt-5 pb-3" style="background-color: #3e2723">
-    <div class="container">
-      <div class="row justify-content-between align-items-start text-center">
-        <div class="col-md-4 mb-4">
-          <h5 class="fw-bold">Sobre Nós</h5>
-          <p class="small">Nosso propósito é conectar crianças e famílias a profissionais especializados, promovendo cuidado, desenvolvimento e inclusão de forma acessível e humanizada.</p>
-        </div>
-        <div class="col-md-4 mb-4 d-flex flex-column align-items-center text-center">
-          <h5 class="fw-bold">Links Úteis</h5>
-          <ul class="list-unstyled small">
-            <li><a href="../index.php" class="text-white text-decoration-none">Início</a></li>
-            <li><a href="pacientes.php" class="text-white text-decoration-none">Pacientes</a></li>
-            <li><a href="profissionais.php" class="text-white text-decoration-none">Profissionais</a></li>
-          </ul>
-        </div>
-        <div class="col-md-4 mb-4">
-          <h5 class="fw-bold">Redes Sociais</h5>
-          <p class="small">Acompanhe nossas novidades e conteúdos:</p>
-          <a href="https://instagram.com/seuInstagram" target="_blank" class="text-white me-3"><i class="bi bi-instagram fs-4"></i></a>
-          <a href="https://facebook.com/seuFacebook" target="_blank" class="text-white me-3"><i class="bi bi-facebook fs-4"></i></a>
-          <a href="https://wa.me/seuNumero" target="_blank" class="text-white"><i class="bi bi-whatsapp fs-4"></i></a>
-        </div>
-      </div>
-      <hr class="border-light" />
-      <div class="text-center small">
-        <p class="mb-0">© 2025 Espaço Escuta - Todos os direitos reservados.</p>
-      </div>
+    <div class="container text-center small">
+      <p class="mb-0">© 2025 ConectaKids - Todos os direitos reservados.</p>
     </div>
   </footer>
 
