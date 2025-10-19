@@ -120,7 +120,7 @@ $linkEstudos = $usuario_logado
             <!-- Login ou nome do usuário -->
             <li class="nav-item ms-auto">
               <?php if ($usuario_logado): ?>
-                <a class="nav-link text-white d-flex align-items-center fs-5" href="painel.php">
+                <a class="nav-link text-white d-flex align-items-center fs-5" href="telasAreaEstudo/areaEstudo.php">
                   <i class="bi bi-person-circle me-1"></i> <?php echo htmlspecialchars($usuario_nome); ?>
                 </a>
               <?php else: ?>

@@ -75,6 +75,12 @@ if (!isset($_SESSION['usuario_id']) || !isset($_SESSION['usuario_tipo'])) {
       padding-top: 20px;
       padding-bottom: 20px;
     }
+    footer  p {
+      color: white;
+    }
+    footer  h5 {
+      color: white;
+    }
 
     footer a {
       color: white;

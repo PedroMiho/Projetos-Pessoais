@@ -67,7 +67,7 @@ $linkEstudos = estaLogado() ? "html/telasAreaEstudo/areaEstudo.php" : "html/tela
             <!-- Login à direita -->
             <li class="nav-item ms-auto">
               <?php if(estaLogado()): ?>
-                <a class="nav-link text-white d-flex align-items-center fs-5" href="painel.php">
+                <a class="nav-link text-white d-flex align-items-center fs-5" href="html/telasAreaEstudo/areaEstudo.php">
                   <i class="bi bi-person-circle me-1"></i> <?php echo $_SESSION['usuario_nome']; ?>
                 </a>
               <?php else: ?>

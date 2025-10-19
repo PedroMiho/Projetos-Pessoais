@@ -130,7 +130,7 @@ $linkEstudos = $usuario_logado
             <!-- Verifica se há sessão -->
             <li class="nav-item ms-auto">
               <?php if ($usuario_logado): ?>
-                <a class="nav-link text-white d-flex align-items-center fs-5" href="painel.php">
+                <a class="nav-link text-white d-flex align-items-center fs-5" href="telasAreaEstudo/areaEstudo.php">
                   <i class="bi bi-person-circle me-1"></i> <?php echo htmlspecialchars($usuario_nome); ?>
                 </a>
               <?php else: ?>
@@ -157,8 +157,8 @@ $linkEstudos = $usuario_logado
           $telefoneFormatado = preg_replace('/(\d{2})(\d{5})(\d{4})/', '($1) $2-$3', $telefone);
 
           // Exibe imagem de perfil se existir
-          $foto = !empty($row['foto_perfil']) && file_exists("uploads/" . $row['foto_perfil'])
-            ? "uploads/" . $row['foto_perfil']
+          $foto = !empty($row['foto_perfil']) && file_exists("telasProfissional/uploads/" . $row['foto_perfil'])
+            ? "telasProfissional/uploads/" . $row['foto_perfil']
             : "../imagens/usuario-default.png";
 
           echo "
