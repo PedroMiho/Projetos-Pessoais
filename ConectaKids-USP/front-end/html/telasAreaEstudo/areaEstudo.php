@@ -124,24 +124,24 @@ if (!isset($_SESSION['usuario_id']) || !isset($_SESSION['usuario_tipo'])) {
       <p class="mb-5" style="color: #5d4037;">Gerencie suas atividades, alunos e perfil de forma simples e intuitiva.</p>
 
       <div class="row g-4 justify-content-center">
+        <!-- Cadastrar Aluno -->
+        <div class="col-md-5 col-lg-3">
+          <div class="card card-opcao p-4 h-100" onclick="window.location.href='outrasTelas/cadastrarAluno.php'">
+            <div class="icon-container"><i class="bi bi-person-plus"></i></div>
+            <h5>Cadastrar Aluno</h5>
+            <p>Adicione um novo aluno à sua lista para acompanhar o desenvolvimento.</p>
+          </div>
+        </div>
 
         <!-- Cadastrar Atividade -->
         <div class="col-md-5 col-lg-3">
-          <div class="card card-opcao p-4 h-100" onclick="window.location.href='cadastrarAtividade.php'">
+          <div class="card card-opcao p-4 h-100" onclick="window.location.href='outrasTelas/cadastrarAtividade.php'">
             <div class="icon-container"><i class="bi bi-journal-plus"></i></div>
             <h5>Cadastrar Atividade</h5>
             <p>Crie novas atividades para seus alunos de maneira prática e rápida.</p>
           </div>
         </div>
 
-        <!-- Cadastrar Aluno -->
-        <div class="col-md-5 col-lg-3">
-          <div class="card card-opcao p-4 h-100" onclick="window.location.href='cadastrarAluno.php'">
-            <div class="icon-container"><i class="bi bi-person-plus"></i></div>
-            <h5>Cadastrar Aluno</h5>
-            <p>Adicione um novo aluno à sua lista para acompanhar o desenvolvimento.</p>
-          </div>
-        </div>
 
         <!-- Corrigir Atividade -->
         <div class="col-md-5 col-lg-3">

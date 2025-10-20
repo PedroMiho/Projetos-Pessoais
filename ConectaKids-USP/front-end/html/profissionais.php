@@ -19,7 +19,7 @@ $usuario_nome = $usuario_logado ? $_SESSION['usuario_nome'] : null;
 // Define link da área de estudos conforme tipo de usuário
 if ($usuario_logado) {
   if ($_SESSION['usuario_tipo'] === 'profissional') {
-    $linkEstudos = "telasAreaEstudo/areaEstudosProfissional.php";
+    $linkEstudos = "telasAreaEstudo/areaEstudo.php";
   } else {
     $linkEstudos = "telasAreaEstudoAluno/areaEstudoAluno.php";
   }
