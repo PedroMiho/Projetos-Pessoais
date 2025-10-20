@@ -4,7 +4,7 @@ include("../../back-end/conexao.php");
 
 // Consulta pacientes
 try {
-  $sql = "SELECT nome, email, telefone, dificuldade, foto_perfil FROM pacientes";
+  $sql = "SELECT nome, email, telefone, dificuldade, foto_perfil, descricao FROM pacientes";
   $stmt = $conn->prepare($sql);
   $stmt->execute();
   $resultado = $stmt->get_result();
@@ -186,6 +186,7 @@ if ($usuario_logado) {
               <div class='card-right'>
                 <p class='info-item'><strong>Telefone:</strong> {$telefoneFormatado}</p>
                 <p class='info-item'><strong>E-mail:</strong> {$row['email']}</p>
+                <p class='info-item'><strong>Descrição:</strong> {$row['descricao']}</p>
               </div>
             </div>
           ";

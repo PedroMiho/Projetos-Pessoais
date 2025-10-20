@@ -103,9 +103,9 @@ if (!isset($_SESSION['usuario_id']) || !isset($_SESSION['usuario_tipo'])) {
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav w-100">
-          <li class="nav-item"><a class="nav-link text-white fs-5" href="#">Atividades</a></li>
-          <li class="nav-item"><a class="nav-link text-white fs-5" href="#">Jogos</a></li>
-          <li class="nav-item"><a class="nav-link text-white fs-5" href="#">Notas</a></li>
+          <li class="nav-item"><a class="nav-link text-white fs-5" href="../profissionais.php">Profissionais</a></li>
+          <li class="nav-item"><a class="nav-link text-white fs-5" href="../pacientes.php">Pacientes</a></li>
+          <li class="nav-item"><a class="nav-link text-white fs-5" href="#">Área de Estudos</a></li>
           <li class="nav-item ms-auto">
             <a class="nav-link text-white fs-5" href="logout.php">
               <i class="bi bi-box-arrow-right me-1"></i> Sair
@@ -115,7 +115,6 @@ if (!isset($_SESSION['usuario_id']) || !isset($_SESSION['usuario_tipo'])) {
       </div>
     </div>
   </nav>
-
   <!-- Conteúdo principal -->
   <main class="py-5">
     <div class="container text-center">
@@ -153,7 +152,7 @@ if (!isset($_SESSION['usuario_id']) || !isset($_SESSION['usuario_tipo'])) {
 
         <!-- Acessar Perfil -->
         <div class="col-md-5 col-lg-3">
-          <div class="card card-opcao p-4 h-100" onclick="window.location.href='../telasAluno/telaPerfilAluno.php'">
+          <div class="card card-opcao p-4 h-100" onclick="window.location.href='../telasProfissional/telaProfissional.php'">
             <div class="icon-container"><i class="bi bi-person-circle"></i></div>
             <h5>Acessar Perfil</h5>
             <p>Edite suas informações pessoais e preferências de aprendizado.</p>

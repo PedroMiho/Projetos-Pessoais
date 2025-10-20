@@ -84,7 +84,7 @@ if ($tipo === 'profissional') {
 
 } else { // Paciente
     $sql = "UPDATE pacientes 
-            SET nome = ?, sobrenome = ?, telefone = ?, dificuldade = ?";
+            SET nome = ?, sobrenome = ?, telefone = ?, dificuldade = ?, descricao = ?";
 
     if ($foto_perfil) {
         $sql .= ", foto_perfil = ?";
@@ -94,9 +94,9 @@ if ($tipo === 'profissional') {
     $stmt = $conn->prepare($sql);
 
     if ($foto_perfil) {
-        $stmt->bind_param("sssssi", $nome, $sobrenome, $telefone, $dificuldade, $foto_perfil, $id);
+        $stmt->bind_param("ssssssi", $nome, $sobrenome, $telefone, $dificuldade, $descricao, $foto_perfil, $id);
     } else {
-        $stmt->bind_param("ssssi", $nome, $sobrenome, $telefone, $dificuldade, $id);
+        $stmt->bind_param("sssssi", $nome, $sobrenome, $telefone, $dificuldade, $descricao, $id);
     }
 }
 
