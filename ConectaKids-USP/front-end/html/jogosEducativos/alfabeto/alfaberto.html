@@ -34,7 +34,7 @@ h1 {
 /* ====== GRID DE LETRAS ====== */
 .letters {
   display: grid;
-  grid-template-columns: repeat(5, 1fr); /* 7 letras por linha */
+  grid-template-columns: repeat(7, 1fr); /* 7 letras por linha */
   gap: 12px;
   justify-items: center;
   margin-top: 20px;
@@ -71,6 +71,7 @@ h1 {
   margin-top: 25px;
   font-size: 18px;
   color: #6d4c41; /* marrom consistente */
+  min-height: 24px;
 }
 </style>
 </head>
@@ -83,6 +84,14 @@ h1 {
 </div>
 
 <script>
+// ====== CONFIGURAÇÃO DO SPEECH SYNTHESIS ======
+let vozPtBr = null;
+
+// Carrega a voz PT-BR quando disponível
+speechSynthesis.onvoiceschanged = () => {
+  vozPtBr = speechSynthesis.getVoices().find(v => v.lang === 'pt-BR') || null;
+};
+
 // ====== CRIAÇÃO DAS LETRAS ======
 const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 const lettersContainer = document.getElementById('lettersContainer');
@@ -99,9 +108,14 @@ letters.forEach(letter => {
     btn.classList.add('active');
     setTimeout(() => btn.classList.remove('active'), 200);
 
-    // Toca o som usando SpeechSynthesis
+    // Cancela fala anterior para evitar atraso
+    speechSynthesis.cancel();
+
+    // Cria e toca a letra
     const utter = new SpeechSynthesisUtterance(letter);
     utter.lang = 'pt-BR';
+    utter.rate = 1.2; // acelera levemente a fala
+    if (vozPtBr) utter.voice = vozPtBr;
     speechSynthesis.speak(utter);
 
     // Atualiza feedback
@@ -111,7 +125,7 @@ letters.forEach(letter => {
   lettersContainer.appendChild(btn);
 });
 
-// ====== Permite tocar letra pelo teclado ======
+// ====== Tocar letra pelo teclado ======
 document.addEventListener('keydown', (e) => {
   const key = e.key.toUpperCase();
   if (letters.includes(key)) {
