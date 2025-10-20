@@ -4,12 +4,12 @@ include("../../back-end/conexao.php");
 
 // Consulta pacientes
 try {
-    $sql = "SELECT nome, email, telefone, dificuldade, foto_perfil FROM pacientes";
-    $stmt = $conn->prepare($sql);
-    $stmt->execute();
-    $resultado = $stmt->get_result();
+  $sql = "SELECT nome, email, telefone, dificuldade, foto_perfil FROM pacientes";
+  $stmt = $conn->prepare($sql);
+  $stmt->execute();
+  $resultado = $stmt->get_result();
 } catch (mysqli_sql_exception $e) {
-    $resultado = false;
+  $resultado = false;
 }
 
 // Verifica login
@@ -18,13 +18,13 @@ $usuario_nome = $usuario_logado ? $_SESSION['usuario_nome'] : null;
 
 // Define link da área de estudos conforme tipo de usuário
 if ($usuario_logado) {
-    if ($_SESSION['usuario_tipo'] === 'profissional') {
-        $linkEstudos = "telasAreaEstudo/areaEstudo.php";
-    } else {
-        $linkEstudos = "telasAreaEstudoAluno/areaEstudoAluno.php";
-    }
+  if ($_SESSION['usuario_tipo'] === 'profissional') {
+    $linkEstudos = "telasAreaEstudo/areaEstudo.php";
+  } else {
+    $linkEstudos = "telasAreaEstudoAluno/areaEstudoAluno.php";
+  }
 } else {
-    $linkEstudos = "telaLogin.php";
+  $linkEstudos = "telaLogin.php";
 }
 ?>
 
@@ -38,7 +38,8 @@ if ($usuario_logado) {
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" />
   <style>
-    html, body {
+    html,
+    body {
       height: 100%;
       margin: 0;
       display: flex;
@@ -134,10 +135,17 @@ if ($usuario_logado) {
               <a class="nav-link text-white fs-5" href="<?php echo $linkEstudos; ?>">Área de Estudos</a>
             </li>
 
-            <!-- Verifica se há sessão -->
             <li class="nav-item ms-auto">
               <?php if ($usuario_logado): ?>
-                <a class="nav-link text-white d-flex align-items-center fs-5" href="telasAreaEstudo/areaEstudo.php">
+                <?php
+                // Define o link correto conforme o tipo de usuário
+                if ($_SESSION['usuario_tipo'] === 'profissional') {
+                  $linkUsuario = "telasAreaEstudo/areaEstudosProfissional.php";
+                } else {
+                  $linkUsuario = "telasAreaEstudoAluno/areaEstudoAluno.php";;
+                }
+                ?>
+                <a class="nav-link text-white d-flex align-items-center fs-5" href="<?php echo $linkUsuario; ?>">
                   <i class="bi bi-person-circle me-1"></i> <?php echo htmlspecialchars($usuario_nome); ?>
                 </a>
               <?php else: ?>
@@ -198,4 +206,5 @@ if ($usuario_logado) {
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
