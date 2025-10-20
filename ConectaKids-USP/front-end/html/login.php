@@ -66,7 +66,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             setcookie("usuario_id", $user['id'], time() + (7 * 24 * 60 * 60), "/", "", true, true);
         }
 
-        header("Location: telasAreaEstudo/areaEstudo.php");
+        header("Location: telasAreaEstudoAluno/areaEstudoAluno.php");
         exit();
     }
 

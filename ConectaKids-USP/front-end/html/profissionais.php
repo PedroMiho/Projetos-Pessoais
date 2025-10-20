@@ -2,24 +2,30 @@
 session_start();
 include("../../back-end/conexao.php");
 
-// Consulta profissionais
+// Consulta pacientes
 try {
-  $sql = "SELECT nome, email, telefone, especialidade, descricao, foto_perfil FROM profissionais";
-  $stmt = $conn->prepare($sql);
-  $stmt->execute();
-  $resultado = $stmt->get_result();
+    $sql = "SELECT nome, email, telefone, especialidade, foto_perfil, descricao FROM profissionais";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $resultado = $stmt->get_result();
 } catch (mysqli_sql_exception $e) {
-  $resultado = false;
+    $resultado = false;
 }
 
 // Verifica login
 $usuario_logado = isset($_SESSION['usuario_id']);
 $usuario_nome = $usuario_logado ? $_SESSION['usuario_nome'] : null;
 
-// Define link da área de estudos
-$linkEstudos = $usuario_logado
-  ? "telasAreaEstudo/areaEstudo.php"
-  : "telaLogin.php";
+// Define link da área de estudos conforme tipo de usuário
+if ($usuario_logado) {
+    if ($_SESSION['usuario_tipo'] === 'profissional') {
+        $linkEstudos = "telasAreaEstudo/areaEstudosProfissional.php";
+    } else {
+        $linkEstudos = "telasAreaEstudoAluno/areaEstudoAluno.php";
+    }
+} else {
+    $linkEstudos = "telaLogin.php";
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">

@@ -1,33 +1,47 @@
 <?php
 session_start();
+include("../back-end/conexao.php"); // Inclua o arquivo de conexão
 
 // Função para verificar login via sessão ou cookie
-function estaLogado() {
-    if(isset($_SESSION['usuario_id'])) {
-        return true;
-    } elseif(isset($_COOKIE['usuario_id'])) {
-        include("conexao.php");
-        $usuario_id = $_COOKIE['usuario_id'];
-        $sql = "SELECT id, nome FROM usuarios WHERE id = ?";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("i", $usuario_id);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        if($result->num_rows === 1){
-            $row = $result->fetch_assoc();
-            $_SESSION['usuario_id'] = $row['id'];
-            $_SESSION['usuario_nome'] = $row['nome'];
-            return true;
-        }
+function estaLogado()
+{
+  global $conn; // permite usar $conn dentro da função
+
+  if (isset($_SESSION['usuario_id']) && isset($_SESSION['usuario_tipo'])) {
+    return true;
+  } elseif (isset($_COOKIE['usuario_id'])) {
+    $usuario_id = $_COOKIE['usuario_id'];
+    $sql = "SELECT id, nome, tipo FROM usuarios WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $usuario_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    if ($result->num_rows === 1) {
+      $row = $result->fetch_assoc();
+      $_SESSION['usuario_id'] = $row['id'];
+      $_SESSION['usuario_nome'] = $row['nome'];
+      $_SESSION['usuario_tipo'] = $row['tipo']; // salva tipo (profissional ou aluno)
+      return true;
     }
-    return false;
+  }
+  return false;
 }
 
-// Decide o link da Área de Estudos
-$linkEstudos = estaLogado() ? "html/telasAreaEstudo/areaEstudo.php" : "html/telaLogin.php";
+// Decide o link da Área de Estudos conforme tipo de usuário
+if (estaLogado()) {
+  if ($_SESSION['usuario_tipo'] === 'profissional') {
+    $linkEstudos = "html/telasAreaEstudo/areaEstudo.php";
+  } else { // aluno
+    $linkEstudos = "html/telasAreaEstudoAluno/areaEstudoAluno.php";
+  }
+} else {
+  $linkEstudos = "html/telaLogin.php";
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -35,13 +49,12 @@ $linkEstudos = estaLogado() ? "html/telasAreaEstudo/areaEstudo.php" : "html/tela
   <link
     href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
     rel="stylesheet"
-    crossorigin="anonymous"
-  />
+    crossorigin="anonymous" />
   <link
     rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
-  />
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" />
 </head>
+
 <body>
   <!-- Header da página -->
   <header>
@@ -66,9 +79,17 @@ $linkEstudos = estaLogado() ? "html/telasAreaEstudo/areaEstudo.php" : "html/tela
             </li>
             <!-- Login à direita -->
             <li class="nav-item ms-auto">
-              <?php if(estaLogado()): ?>
-                <a class="nav-link text-white d-flex align-items-center fs-5" href="html/telasAreaEstudo/areaEstudo.php">
-                  <i class="bi bi-person-circle me-1"></i> <?php echo $_SESSION['usuario_nome']; ?>
+              <?php if (estaLogado()): ?>
+                <?php
+                // Define o link correto conforme o tipo de usuário
+                if ($_SESSION['usuario_tipo'] === 'profissional') {
+                  $linkEstudos = "html/telasAreaEstudo/areaEstudo.php";
+                } else {
+                  $linkUsuario = $linkEstudos = "html/telasAreaEstudoAluno/areaEstudoAluno.php";
+                }
+                ?>
+                <a class="nav-link text-white d-flex align-items-center fs-5" href="<?php echo $linkUsuario; ?>">
+                  <i class="bi bi-person-circle me-1"></i> <?php echo htmlspecialchars($_SESSION['usuario_nome']); ?>
                 </a>
               <?php else: ?>
                 <a class="nav-link text-white d-flex align-items-center fs-5" href="html/telaLogin.php">
@@ -76,6 +97,7 @@ $linkEstudos = estaLogado() ? "html/telasAreaEstudo/areaEstudo.php" : "html/tela
                 </a>
               <?php endif; ?>
             </li>
+
           </ul>
         </div>
       </div>
@@ -267,4 +289,5 @@ $linkEstudos = estaLogado() ? "html/telasAreaEstudo/areaEstudo.php" : "html/tela
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 </body>
+
 </html>
