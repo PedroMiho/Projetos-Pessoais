@@ -145,7 +145,7 @@ if (!isset($_SESSION['usuario_id']) || !isset($_SESSION['usuario_tipo'])) {
 
         <!-- Corrigir Atividade -->
         <div class="col-md-5 col-lg-3">
-          <div class="card card-opcao p-4 h-100" onclick="window.location.href='corrigirAtividade.php'">
+          <div class="card card-opcao p-4 h-100" onclick="window.location.href='outrasTelas/corrigirAtividade.php'">
             <div class="icon-container"><i class="bi bi-pencil-square"></i></div>
             <h5>Corrigir Atividade</h5>
             <p>Visualize e corrija as atividades enviadas pelos seus alunos.</p>

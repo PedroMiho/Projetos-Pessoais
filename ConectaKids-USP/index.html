@@ -1,0 +1,496 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Checklist de Segurança - Operação de Máquina</title>
+    <style>
+        /* Seu CSS permanece igual */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        header {
+            background: #2c3e50;
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .instructions {
+            background: #f8f9fa;
+            padding: 20px;
+            border-bottom: 1px solid #e9ecef;
+            font-size: 15px;
+        }
+
+        .checklist-container {
+            padding: 20px;
+        }
+
+        .category {
+            margin-bottom: 30px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .category-header {
+            padding: 15px 20px;
+            color: white;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .category-header i {
+            margin-right: 10px;
+            font-size: 20px;
+        }
+
+        .critical .category-header {
+            background: #e74c3c;
+        }
+
+        .warning .category-header {
+            background: #f39c12;
+        }
+
+        .normal .category-header {
+            background: #27ae60;
+        }
+
+        .questions {
+            padding: 15px;
+            background: #f8f9fa;
+        }
+
+        .question {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .question-text {
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .question-number {
+            display: inline-block;
+            width: 25px;
+            height: 25px;
+            background: #2c3e50;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 25px;
+            margin-right: 10px;
+            flex-shrink: 0;
+        }
+
+        .question-desc {
+            font-size: 14px;
+            color: #6c757d;
+            margin-bottom: 12px;
+            padding-left: 35px;
+        }
+
+        .options {
+            display: flex;
+            padding-left: 35px;
+        }
+
+        .option {
+            margin-right: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        input[type="radio"] {
+            margin-right: 8px;
+            width: 18px;
+            height: 18px;
+        }
+
+        .btn-container {
+            text-align: center;
+            padding: 20px;
+            background: #f8f9fa;
+            border-top: 1px solid #e9ecef;
+        }
+
+        button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
+        }
+
+        button:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(52, 152, 219, 0.4);
+        }
+
+        .result {
+            text-align: center;
+            padding: 25px;
+            margin: 20px;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            display: none;
+        }
+
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .danger {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .warning-result {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 14px;
+            color: #6c757d;
+            background: #f8f9fa;
+            border-top: 1px solid #e9ecef;
+        }
+
+        @media (max-width: 768px) {
+            .options {
+                flex-direction: column;
+            }
+
+            .option {
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Checklist de Segurança e Operação</h1>
+            <p class="subtitle">Preencha o checklist completo antes de operar a máquina</p>
+        </header>
+        <div class="instructions">
+            <p>Este checklist é obrigatório para operação segura da máquina. Responda todas as questões com atenção.
+                Itens marcados como <strong>🔴 NÃO OPERAR</strong> devem estar OK para que a operação seja permitida.
+            </p>
+        </div>
+        <div class="checklist-container">
+            <form id="checklistForm">
+                <div class="category critical">
+                    <div class="category-header">
+                        <i>🔴</i> NÃO OPERAR se não estiver OK (risco imediato ao operador)
+                    </div>
+                    <div class="questions">
+                        <div class="question">
+                            <div class="question-text">
+                                <span class="question-number">1</span>
+                                Verificar o nível do óleo (cabeçote fixo, avental e caixa Norton)
+                            </div>
+                            <div class="question-desc">
+                                Baixo nível de óleo pode causar danos aos componentes e travamento da máquina durante a
+                                operação, com risco de acidente.
+                            </div>
+                            <div class="options">
+                                <div class="option">
+                                    <input type="radio" name="oleo" id="oleo-ok" value="ok" required>
+                                    <label for="oleo-ok">OK</label>
+                                </div>
+                                <div class="option">
+                                    <input type="radio" name="oleo" id="oleo-nok" value="nok">
+                                    <label for="oleo-nok">NÃO OK</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="question">
+                            <div class="question-text">
+                                <span class="question-number">2</span>
+                                Verificar vazamentos no sistema de refrigeração
+                            </div>
+                            <div class="question-desc">
+                                Um vazamento pode causar curto-circuito, escorregamento no piso ou até queimar o motor
+                                da bomba.
+                            </div>
+                            <div class="options">
+                                <div class="option">
+                                    <input type="radio" name="vazamentos" id="vazamentos-ok" value="ok" required>
+                                    <label for="vazamentos-ok">OK</label>
+                                </div>
+                                <div class="option">
+                                    <input type="radio" name="vazamentos" id="vazamentos-nok" value="nok">
+                                    <label for="vazamentos-nok">NÃO OK</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="question">
+                            <div class="question-text">
+                                <span class="question-number">3</span>
+                                Testes das segurança (sensor da porta, botão de emergência e o freio)
+                            </div>
+                            <div class="question-desc">
+                                Os dispositivos de segurança devem funcionar perfeitamente para proteger o operador em
+                                situações de emergência.
+                            </div>
+                            <div class="options">
+                                <div class="option">
+                                    <input type="radio" name="seguranca" id="seguranca-ok" value="ok" required>
+                                    <label for="seguranca-ok">OK</label>
+                                </div>
+                                <div class="option">
+                                    <input type="radio" name="seguranca" id="seguranca-nok" value="nok">
+                                    <label for="seguranca-nok">NÃO OK</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="category warning">
+                    <div class="category-header">
+                        <i>🟡</i> PODE OPERAR COM ATENÇÃO (não trava a operação, mas exige cuidado)
+                    </div>
+                    <div class="questions">
+                        <div class="question">
+                            <div class="question-text">
+                                <span class="question-number">4</span>
+                                Inspeção visual (sujeira na máquina, algo quebrado, se está limpa ou não, peça presa)
+                            </div>
+                            <div class="question-desc">
+                                Uma inspeção visual pode identificar problemas que podem afetar a qualidade do trabalho
+                                ou a segurança do operador.
+                            </div>
+                            <div class="options">
+                                <div class="option">
+                                    <input type="radio" name="inspecao" id="inspecao-ok" value="ok">
+                                    <label for="inspecao-ok">OK</label>
+                                </div>
+                                <div class="option">
+                                    <input type="radio" name="inspecao" id="inspecao-nok" value="nok">
+                                    <label for="inspecao-nok">NÃO OK</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="question">
+                            <div class="question-text">
+                                <span class="question-number">5</span>
+                                Limpar visor da porta
+                            </div>
+                            <div class="question-desc">
+                                Afeta a visibilidade; se estiver sujo, o operador não enxerga bem o processo e pode não
+                                perceber um problema.
+                            </div>
+                            <div class="options">
+                                <div class="option">
+                                    <input type="radio" name="visor" id="visor-ok" value="ok">
+                                    <label for="visor-ok">OK</label>
+                                </div>
+                                <div class="option">
+                                    <input type="radio" name="visor" id="visor-nok" value="nok">
+                                    <label for="visor-nok">NÃO OK</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="question">
+                            <div class="question-text">
+                                <span class="question-number">6</span>
+                                Inspecionar raspadores de cavacos
+                            </div>
+                            <div class="question-desc">
+                                Se estiverem ruins, pode acumular cavaco e prejudicar o avanço, mas raramente é risco
+                                imediato.
+                            </div>
+                            <div class="options">
+                                <div class="option">
+                                    <input type="radio" name="raspadores" id="raspadores-ok" value="ok">
+                                    <label for="raspadores-ok">OK</label>
+                                </div>
+                                <div class="option">
+                                    <input type="radio" name="raspadores" id="raspadores-nok" value="nok">
+                                    <label for="raspadores-nok">NÃO OK</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="question">
+                            <div class="question-text">
+                                <span class="question-number">7</span>
+                                Retirar excessos de cavacos da área de usinagem
+                            </div>
+                            <div class="question-desc">
+                                Importante para evitar que cavacos sejam arremessados ou interfiram no corte, mas
+                                normalmente não é impeditivo de ligar a máquina.
+                            </div>
+                            <div class="options">
+                                <div class="option">
+                                    <input type="radio" name="cavacos" id="cavacos-ok" value="ok">
+                                    <label for="cavacos-ok">OK</label>
+                                </div>
+                                <div class="option">
+                                    <input type="radio" name="cavacos" id="cavacos-nok" value="nok">
+                                    <label for="cavacos-nok">NÃO OK</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="question">
+                            <div class="question-text">
+                                <span class="question-number">8</span>
+                                Limpar filtros (tela) do tanque de fluido refrigerante
+                            </div>
+                            <div class="question-desc">
+                                Se sujos, reduzem a eficiência do fluido, aumentando desgaste e calor, mas não oferecem
+                                risco imediato ao operador.
+                            </div>
+                            <div class="options">
+                                <div class="option">
+                                    <input type="radio" name="filtros" id="filtros-ok" value="ok">
+                                    <label for="filtros-ok">OK</label>
+                                </div>
+                                <div class="option">
+                                    <input type="radio" name="filtros" id="filtros-nok" value="nok">
+                                    <label for="filtros-nok">NÃO OK</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="category normal">
+                    <div class="category-header">
+                        <i>🟢</i> OK PARA OPERAÇÃO NORMAL
+                    </div>
+                    <div class="questions">
+                        <div class="question">
+                            <div class="question-text">
+                                <span class="question-number">9</span>
+                                Verificação geral de preparação para operação
+                            </div>
+                            <div class="question-desc">
+                                Todos os itens exigem atenção periódica. Nenhum ponto é irrelevante para a segurança ou
+                                qualidade.
+                            </div>
+                            <div class="options">
+                                <div class="option">
+                                    <input type="radio" name="verificacao" id="verificacao-ok" value="ok">
+                                    <label for="verificacao-ok">OK</label>
+                                </div>
+                                <div class="option">
+                                    <input type="radio" name="verificacao" id="verificacao-nok" value="nok">
+                                    <label for="verificacao-nok">NÃO OK</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="btn-container">
+                    <button type="submit">Verificar Condições de Operação</button>
+                </div>
+            </form>
+            <div id="result" class="result"></div>
+        </div>
+        <footer>
+            <p>Checklist de Segurança - Sistema de Prevenção de Acidentes</p>
+            <p>©️ 2025 - Todos os direitos reservados</p>
+        </footer>
+    </div>
+
+    <script>
+        document.getElementById('checklistForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const criticos = ['oleo', 'vazamentos', 'seguranca'];
+            const atencao = ['inspecao', 'visor', 'raspadores', 'cavacos', 'filtros'];
+            const todasPerguntas = criticos.concat(atencao).concat(['verificacao']);
+
+            // Verifica se todas as perguntas obrigatórias foram respondidas
+            for (const pergunta of todasPerguntas) {
+                if (!document.querySelector(`input[name="${pergunta}"]:checked`)) {
+                    alert('Por favor, responda todas as perguntas obrigatórias.');
+                    return;
+                }
+            }
+
+            // Monta objeto com respostas
+            const respostas = {};
+            todasPerguntas.forEach(item => {
+                const selecionado = document.querySelector(`input[name="${item}"]:checked`);
+                respostas[item] = selecionado ? selecionado.value : null;
+            });
+
+            // Envia para Node-RED via fetch
+            fetch('http://10.105.195.109:1880/checklist', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(respostas)
+            })
+            .then(response => response.json())
+            .then(data => {
+                const resultDiv = document.getElementById('result');
+                resultDiv.style.display = 'block';
+                resultDiv.className = 'result ' + (data.statusClass || '');
+                resultDiv.innerHTML = data.message || 'Resposta inválida do servidor.';
+                resultDiv.scrollIntoView({ behavior: 'smooth' });
+            })
+            .catch(err => {
+                alert('Erro ao enviar dados para o servidor: ' + err);
+            });
+        });
+    </script>
+</body>
+
+</html>
