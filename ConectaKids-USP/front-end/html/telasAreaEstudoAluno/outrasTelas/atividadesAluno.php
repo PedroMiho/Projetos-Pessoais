@@ -51,7 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['atividade_id'])) {
     }
     $stmt->execute();
 
-    header("Location: verAtividadesAluno.php?msg=entregue");
+    header("Location: atividadesAluno.php");
     exit();
   }
 }
@@ -71,6 +71,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['atividade_id'])) {
     footer { background-color: #3e2723; color: white; padding: 1.5rem 0; text-align: center; margin-top: auto; }
     .card-atividade { border-left: 6px solid #6d4c41; border-radius: 10px; padding: 15px; margin-bottom: 15px; background: #fff; }
     .btn-principal { background-color: #6d4c41; color: white; font-weight: 500; }
+    .btn-principal:hover { background-color: #5d4037; color: white; }
   </style>
 </head>
 <body>
@@ -133,15 +134,32 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['atividade_id'])) {
         </a>
 
         <?php if (!empty($a['arquivo_entregue'])): ?>
-          <a href="../../../../<?= $a['arquivo_entregue'] ?>" target="_blank" class="btn btn-outline-success btn-sm mt-2">
+          <a href="../outrasTelas/<?= $a['arquivo_entregue'] ?>" target="_blank" class="btn btn-outline-success btn-sm mt-2">
             <i class="bi bi-check-circle"></i> Ver Entrega
           </a>
+
+          <?php if ($a['data_encerramento'] >= $hoje): ?>
+            <!-- Permitir reenviar caso o prazo ainda esteja válido -->
+            <form method="POST" enctype="multipart/form-data" class="mt-2">
+              <input type="hidden" name="atividade_id" value="<?= $a['atividade_id'] ?>">
+              <div class="input-group">
+                <input type="file" name="arquivo_entregue" class="form-control" accept="application/pdf" required>
+                <button type="submit" class="btn btn-warning text-dark">
+                  <i class="bi bi-arrow-repeat"></i> Alterar Entrega
+                </button>
+              </div>
+            </form>
+          <?php endif; ?>
+
         <?php elseif ($a['data_encerramento'] >= $hoje): ?>
+          <!-- Primeira entrega -->
           <form method="POST" enctype="multipart/form-data" class="mt-3">
             <input type="hidden" name="atividade_id" value="<?= $a['atividade_id'] ?>">
             <div class="input-group">
               <input type="file" name="arquivo_entregue" class="form-control" accept="application/pdf" required>
-              <button type="submit" class="btn btn-principal">Enviar</button>
+              <button type="submit" class="btn btn-principal">
+                <i class="bi bi-upload"></i> Enviar
+              </button>
             </div>
           </form>
         <?php endif; ?>
