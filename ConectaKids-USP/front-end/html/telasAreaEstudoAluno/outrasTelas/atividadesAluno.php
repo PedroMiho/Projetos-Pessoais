@@ -1,6 +1,41 @@
 <?php
 session_start();
 include("../../../../back-end/conexao.php");
+// Função para verificar login via sessão ou cookie
+function estaLogado()
+{
+  global $conn; // permite usar $conn dentro da função
+
+  if (isset($_SESSION['usuario_id']) && isset($_SESSION['usuario_tipo'])) {
+    return true;
+  } elseif (isset($_COOKIE['usuario_id'])) {
+    $usuario_id = $_COOKIE['usuario_id'];
+    $sql = "SELECT id, nome, tipo FROM usuarios WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $usuario_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    if ($result->num_rows === 1) {
+      $row = $result->fetch_assoc();
+      $_SESSION['usuario_id'] = $row['id'];
+      $_SESSION['usuario_nome'] = $row['nome'];
+      $_SESSION['usuario_tipo'] = $row['tipo']; // salva tipo (profissional ou aluno)
+      return true;
+    }
+  }
+  return false;
+}
+
+// Decide o link da Área de Estudos conforme tipo de usuário
+if (estaLogado()) {
+  if ($_SESSION['usuario_tipo'] === 'profissional') {
+    $linkEstudos = "html/telasAreaEstudo/areaEstudo.php";
+  } else { // aluno
+    $linkEstudos = "../areaEstudoAluno.php";
+  }
+} else {
+  $linkEstudos = "html/telaLogin.php";
+}
 
 // ====== VERIFICA LOGIN ======
 if (!isset($_SESSION['usuario_id']) || $_SESSION['usuario_tipo'] !== 'paciente') {
@@ -78,23 +113,51 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['atividade_id'])) {
 
 <!-- Header -->
 <header>
-  <nav class="navbar navbar-expand-lg" style="background-color: #6d4c41">
-    <div class="container-fluid">
-      <a class="navbar-brand text-white fw-bold fs-5" href="#">ConectaKids</a>
-      <div class="collapse navbar-collapse">
-        <ul class="navbar-nav w-100">
-          <li class="nav-item"><a class="nav-link text-white fs-5" href="../../pacientes.php">Início</a></li>
-          <li class="nav-item"><a class="nav-link text-white fs-5" href="../../telasAreaEstudo/areaEstudo.php">Área de Estudos</a></li>
-          <li class="nav-item ms-auto">
-            <a class="nav-link text-white d-flex align-items-center fs-5" href="../../painelAluno.php">
-              <i class="bi bi-person-circle me-1"></i> <?= htmlspecialchars($_SESSION['usuario_nome']); ?>
-            </a>
-          </li>
-        </ul>
+    <nav class="navbar navbar-expand-lg" style="background-color: #6d4c41">
+      <div class="container-fluid">
+        <a class="navbar-brand text-white fw-bold fs-5" href="../../../index.php">ConectaKids</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav w-100">
+            <!-- Links à esquerda -->
+            <li class="nav-item">
+              <a class="nav-link text-white active fs-5" aria-current="page" href="../../profissionais.php">Profissionais</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-white fs-5" href="../../pacientes.php">Pacientes</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-white fs-5" href="<?php echo $linkEstudos; ?>">Área de Estudos</a>
+            </li>
+            <!-- Login à direita -->
+            <li class="nav-item ms-auto">
+              <?php if (estaLogado()): ?>
+                <?php
+                // Define o link correto conforme o tipo de usuário
+                if ($_SESSION['usuario_tipo'] === 'profissional') {
+                  $linkEstudos = "html/telasAreaEstudo/areaEstudo.php";
+                } else {
+                  $linkUsuario = $linkEstudos = "html/telasAreaEstudoAluno/areaEstudoAluno.php";
+                }
+                ?>
+                <a class="nav-link text-white d-flex align-items-center fs-5" href="<?php echo $linkUsuario; ?>">
+                  <i class="bi bi-person-circle me-1"></i> <?php echo htmlspecialchars($_SESSION['usuario_nome']); ?>
+                </a>
+              <?php else: ?>
+                <a class="nav-link text-white d-flex align-items-center fs-5" href="html/telaLogin.php">
+                  <i class="bi bi-person-circle me-1"></i> Login
+                </a>
+              <?php endif; ?>
+            </li>
+
+          </ul>
+        </div>
       </div>
-    </div>
-  </nav>
-</header>
+    </nav>
+  </header>
 
 <!-- Main -->
 <main class="container py-5">
