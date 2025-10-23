@@ -20,17 +20,17 @@ $stmt->bind_param("i", $profissional_id);
 $stmt->execute();
 $alunos = $stmt->get_result();
 
-// ====== CADASTRAR ATIVIDADE COM PRG ======
+// ====== CADASTRAR / EXCLUIR / EDITAR ATIVIDADE ======
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['paciente_id'], $_POST['acao'])) {
     $paciente_id = intval($_POST['paciente_id']);
 
+    // CADASTRAR
     if ($_POST['acao'] === 'cadastrar') {
         $nomeAtividade = $_POST['nome_atividade'];
         $descricao = $_POST['descricao'];
         $dataInicio = $_POST['data_inicio'];
         $dataEncerramento = $_POST['data_encerramento'];
 
-        // Upload do PDF
         if (isset($_FILES['arquivo_pdf']) && $_FILES['arquivo_pdf']['error'] === 0) {
             $pasta = "uploads/";
             if (!is_dir($pasta)) mkdir($pasta, 0755, true);
@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['paciente_id'], $_POST
         exit();
     }
 
-    // ====== EXCLUIR ATIVIDADE ======
+    // EXCLUIR
     if ($_POST['acao'] === 'excluir' && isset($_POST['atividade_id'])) {
         $atividade_id = intval($_POST['atividade_id']);
         $sqlDel = "DELETE FROM atividades WHERE id = ? AND profissional_id = ?";
@@ -57,6 +57,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['paciente_id'], $_POST
         $stmt->bind_param("ii", $atividade_id, $profissional_id);
         $stmt->execute();
         header("Location: cadastrarAtividade.php?aluno=$paciente_id&msg=excluido");
+        exit();
+    }
+
+    // EDITAR DATA DE ENCERRAMENTO
+    if ($_POST['acao'] === 'editar' && isset($_POST['atividade_id'], $_POST['nova_data'])) {
+        $atividade_id = intval($_POST['atividade_id']);
+        $novaData = $_POST['nova_data'];
+        $sqlUp = "UPDATE atividades SET data_encerramento = ? WHERE id = ? AND profissional_id = ?";
+        $stmt = $conn->prepare($sqlUp);
+        $stmt->bind_param("sii", $novaData, $atividade_id, $profissional_id);
+        $stmt->execute();
+        header("Location: cadastrarAtividade.php?aluno=$paciente_id&msg=editado");
         exit();
     }
 }
@@ -82,20 +94,9 @@ if (isset($_GET['aluno'])) {
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
   <style>
-    body { 
-        background-color: #f7f3f0; 
-        display: flex; 
-        flex-direction: column; 
-        min-height: 100vh; 
-    }
+    body { background-color: #f7f3f0; display: flex; flex-direction: column; min-height: 100vh; }
     main { flex: 1; }
-    footer { 
-        background-color: #3e2723; 
-        color: white; 
-        padding: 1.5rem 0; 
-        text-align: center; 
-        margin-top: auto; 
-    }
+    footer { background-color: #3e2723; color: white; padding: 1.5rem 0; text-align: center; margin-top: auto; }
     .card-aluno:hover { transform: scale(1.03); cursor: pointer; }
     .foto-aluno { width: 100px; height: 100px; object-fit: cover; border-radius: 50%; border: 3px solid #6d4c41; }
     .btn-principal { background-color: #6d4c41; color: white; font-weight: 500; }
@@ -131,10 +132,12 @@ if (isset($_GET['aluno'])) {
         <div class="alert alert-success text-center">Atividade cadastrada com sucesso!</div>
       <?php elseif ($_GET['msg'] === 'excluido'): ?>
         <div class="alert alert-warning text-center">Atividade excluída com sucesso!</div>
+      <?php elseif ($_GET['msg'] === 'editado'): ?>
+        <div class="alert alert-info text-center">Data de encerramento atualizada com sucesso!</div>
       <?php endif; ?>
   <?php endif; ?>
 
-  <!-- Lista de Alunos Vinculados -->
+  <!-- Lista de alunos -->
   <div class="row mb-5">
     <h4 class="mb-3 text-center" style="color:#3e2723;">Selecione um aluno</h4>
     <?php while ($aluno = $alunos->fetch_assoc()): 
@@ -152,7 +155,7 @@ if (isset($_GET['aluno'])) {
     <?php endwhile; ?>
   </div>
 
-  <!-- Cadastrar nova atividade -->
+  <!-- Formulário de Cadastro de Atividade -->
   <?php if (isset($_GET['aluno'])): ?>
   <div class="card p-4 mb-5">
     <h5 class="text-center mb-4" style="color: #3e2723;">Cadastrar nova atividade</h5>
@@ -189,11 +192,11 @@ if (isset($_GET['aluno'])) {
     </form>
   </div>
 
-  <!-- Tabela de Atividades -->
+  <!-- Tabela de atividades -->
   <h5 class="text-center mb-3" style="color:#3e2723;">Atividades deste aluno</h5>
   <div class="table-responsive">
-    <table class="table table-striped align-middle">
-      <thead class="table-dark text-center">
+    <table class="table table-striped align-middle text-center">
+      <thead class="table-dark">
         <tr>
           <th>Nome</th>
           <th>Data Início</th>
@@ -203,7 +206,7 @@ if (isset($_GET['aluno'])) {
           <th>Ações</th>
         </tr>
       </thead>
-      <tbody class="text-center">
+      <tbody>
         <?php if ($atividades && $atividades->num_rows > 0): ?>
           <?php while ($atv = $atividades->fetch_assoc()): ?>
             <tr>
@@ -213,12 +216,43 @@ if (isset($_GET['aluno'])) {
               <td><a href="<?= $atv['arquivo_pdf'] ?>" target="_blank" class="btn btn-outline-dark btn-sm"><i class="bi bi-file-earmark-pdf"></i> Abrir</a></td>
               <td><?= (strtotime($atv['data_encerramento']) < time()) ? '<span class="text-danger">Encerrada</span>' : '<span class="text-success">Em andamento</span>' ?></td>
               <td>
-                <form method="POST" style="display:inline-block;">
+                <!-- Excluir -->
+                <form method="POST" class="d-inline">
                   <input type="hidden" name="paciente_id" value="<?= $_GET['aluno'] ?>">
                   <input type="hidden" name="atividade_id" value="<?= $atv['id'] ?>">
                   <input type="hidden" name="acao" value="excluir">
-                  <button type="submit" class="btn btn-outline-danger btn-sm"><i class="bi bi-trash"></i> Excluir</button>
+                  <button type="submit" class="btn btn-outline-danger btn-sm"><i class="bi bi-trash"></i></button>
                 </form>
+
+                <!-- Editar -->
+                <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editar<?= $atv['id'] ?>">
+                  <i class="bi bi-pencil"></i>
+                </button>
+
+                <!-- Modal de Edição -->
+                <div class="modal fade" id="editar<?= $atv['id'] ?>" tabindex="-1">
+                  <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title">Editar Data de Encerramento</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                      </div>
+                      <form method="POST">
+                        <div class="modal-body">
+                          <input type="hidden" name="paciente_id" value="<?= $_GET['aluno'] ?>">
+                          <input type="hidden" name="atividade_id" value="<?= $atv['id'] ?>">
+                          <input type="hidden" name="acao" value="editar">
+                          <label class="form-label">Nova Data de Encerramento</label>
+                          <input type="date" name="nova_data" class="form-control" value="<?= $atv['data_encerramento'] ?>" required>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                          <button type="submit" class="btn btn-principal">Salvar Alteração</button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
               </td>
             </tr>
           <?php endwhile; ?>
@@ -229,7 +263,6 @@ if (isset($_GET['aluno'])) {
     </table>
   </div>
   <?php endif; ?>
-
 </main>
 
 <footer>
@@ -238,5 +271,6 @@ if (isset($_GET['aluno'])) {
   </div>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

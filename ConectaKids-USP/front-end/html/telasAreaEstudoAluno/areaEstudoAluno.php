@@ -125,7 +125,7 @@ if (!isset($_SESSION['usuario_id']) || !isset($_SESSION['usuario_tipo'])) {
 
         <!-- Atividades Cadastradas -->
         <div class="col-md-5 col-lg-3">
-          <div class="card card-opcao p-4 h-100" onclick="window.location.href='atividadesCadastradas.php'">
+          <div class="card card-opcao p-4 h-100" onclick="window.location.href='outrasTelas/atividadesAluno.php'">
             <div class="icon-container"><i class="bi bi-journal-text"></i></div>
             <h5>Atividades Cadastradas</h5>
             <p>Confira todas as atividades disponibilizadas pelos seus professores.</p>

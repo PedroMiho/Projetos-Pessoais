@@ -26,13 +26,13 @@ if (isset($_GET['aluno'])) {
   $aluno_id = $_GET['aluno'];
   $sqlAtividades = "
     SELECT a.id, a.nome_atividade, a.descricao, a.data_inicio, a.data_encerramento, 
-           e.arquivo_entregue, e.data_entrega
+           e.id AS entrega_id, e.arquivo_entregue, e.data_entrega, e.nota
     FROM atividades a
-    LEFT JOIN entregas_atividades e ON e.atividade_id = a.id AND e.paciente_id = a.paciente_id
+    LEFT JOIN entregas_atividades e ON e.atividade_id = a.id AND e.paciente_id = ?
     WHERE a.profissional_id = ? AND a.paciente_id = ?
   ";
   $stmtAtividades = $conn->prepare($sqlAtividades);
-  $stmtAtividades->bind_param("ii", $profissional_id, $aluno_id);
+  $stmtAtividades->bind_param("iii", $aluno_id, $profissional_id, $aluno_id);
   $stmtAtividades->execute();
   $atividades = $stmtAtividades->get_result();
 }
@@ -53,7 +53,7 @@ if (isset($_GET['aluno'])) {
     .foto-aluno { width: 100px; height: 100px; object-fit: cover; border-radius: 50%; border: 3px solid #6d4c41; }
     .card-aluno:hover { transform: scale(1.05); cursor: pointer; }
     .section-title { background-color: #6d4c41; color: white; padding: 10px; border-radius: 10px; }
-    .card-atividade { border-radius: 10px; border-left: 6px solid #6d4c41; margin-bottom: 10px; }
+    .card-atividade { border-radius: 10px; border-left: 6px solid #6d4c41; margin-bottom: 10px; background-color: #fff; }
   </style>
 </head>
 <body>
@@ -83,7 +83,6 @@ if (isset($_GET['aluno'])) {
 <main class="container py-5">
   <h2 class="text-center mb-4" style="color: #3e2723;">Acompanhamento de Atividades</h2>
 
-  <!-- Se nenhum aluno for selecionado -->
   <?php if (!isset($_GET['aluno'])): ?>
     <div class="row justify-content-center">
       <h5 class="text-center mb-4" style="color: #3e2723;">Selecione um aluno para visualizar as atividades</h5>
@@ -105,7 +104,6 @@ if (isset($_GET['aluno'])) {
     </div>
   <?php else: ?>
 
-    <!-- Se o aluno foi selecionado -->
     <?php
       $sqlAluno = "SELECT nome, sobrenome, foto_perfil FROM pacientes WHERE id = ?";
       $stmtA = $conn->prepare($sqlAluno);
@@ -120,10 +118,9 @@ if (isset($_GET['aluno'])) {
     <div class="text-center mb-5">
       <img src="<?= $foto ?>" class="foto-aluno mb-2">
       <h4><?= $alunoSel['nome']." ".$alunoSel['sobrenome'] ?></h4>
-      <a href="acompanhamentoAtividades.php" class="btn btn-outline-secondary mt-2">Voltar</a>
+      <a href="corrigirAtividade.php" class="btn btn-outline-secondary mt-2">Voltar</a>
     </div>
 
-    <!-- Seções de atividades -->
     <?php
       $entregues = [];
       $andamento = [];
@@ -143,14 +140,21 @@ if (isset($_GET['aluno'])) {
       function renderAtividade($atv, $entregue = false) {
         $dataInicio = date('d/m/Y', strtotime($atv['data_inicio']));
         $dataFim = date('d/m/Y', strtotime($atv['data_encerramento']));
-        echo "<div class='card card-atividade p-3'>
+        echo "<div class='card card-atividade p-3 mb-3'>
                 <h5>{$atv['nome_atividade']}</h5>
                 <p class='text-muted small'>{$atv['descricao']}</p>
-                <p class='mb-1'><strong>Início:</strong> $dataInicio | <strong>Encerramento:</strong> $dataFim</p>";
+                <p><strong>Início:</strong> $dataInicio | <strong>Encerramento:</strong> $dataFim</p>";
         if ($entregue) {
-          echo "<a href='../../../../{$atv['arquivo_entregue']}' target='_blank' class='btn btn-outline-success btn-sm mt-2'>
-                  <i class='bi bi-file-earmark-pdf'></i> Ver PDF Entregue
-                </a>";
+          echo "<div class='d-flex align-items-center gap-3'>
+                  <a href='../../telasAreaEstudoAluno/outrasTelas/{$atv['arquivo_entregue']}' target='_blank' class='btn btn-outline-success btn-sm'>
+                    <i class='bi bi-file-earmark-pdf'></i> Ver PDF Entregue
+                  </a>
+                  <form method='POST' action='salvarNota.php' class='d-flex align-items-center gap-2'>
+                    <input type='hidden' name='entrega_id' value='{$atv['entrega_id']}'>
+                    <input type='number' name='nota' class='form-control form-control-sm' style='width: 120px; text-align: center; font-size: 1rem;' min='0' max='10' step='0.1'   value='".htmlspecialchars($atv['nota'] ?? '')."'  placeholder='Nota'>
+                    <button type='submit' class='btn btn-sm btn-primary'>Salvar Nota</button>
+                  </form>
+                </div>";
         }
         echo "</div>";
       }
