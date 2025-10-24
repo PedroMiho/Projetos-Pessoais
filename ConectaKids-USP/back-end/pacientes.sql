@@ -60,6 +60,17 @@ CREATE TABLE atividades (
     FOREIGN KEY (paciente_id) REFERENCES pacientes(id) ON DELETE CASCADE
 );
 
+CREATE TABLE entregas_atividades (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  atividade_id INT NOT NULL,
+  paciente_id INT NOT NULL,
+  nota DECIMAL(5,2) NULL,
+  arquivo_entregue VARCHAR(255),
+  data_entrega DATE,
+  FOREIGN KEY (atividade_id) REFERENCES atividades(id),
+  FOREIGN KEY (paciente_id) REFERENCES pacientes(id)
+);
+
 
 select * from pacientes;
 select * from profissionais;
