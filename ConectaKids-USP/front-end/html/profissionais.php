@@ -4,7 +4,12 @@ include("../../back-end/conexao.php");
 
 // Consulta pacientes
 try {
-  $sql = "SELECT nome, email, telefone, especialidade, foto_perfil, descricao FROM profissionais";
+  $sql = "SELECT nome, email, telefone, especialidade, foto_perfil, descricao 
+          FROM profissionais
+          WHERE perfil_publico = 1
+            AND foto_perfil IS NOT NULL AND foto_perfil <> ''
+            AND especialidade IS NOT NULL AND especialidade <> ''
+            AND descricao IS NOT NULL AND descricao <> ''";
   $stmt = $conn->prepare($sql);
   $stmt->execute();
   $resultado = $stmt->get_result();

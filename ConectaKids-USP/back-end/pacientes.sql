@@ -1,5 +1,7 @@
 create database conectaKids;
 use conectaKids;
+
+-- Tabela de profissionais
 CREATE TABLE profissionais (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
@@ -7,13 +9,15 @@ CREATE TABLE profissionais (
     telefone VARCHAR(11) NOT NULL,
     email VARCHAR(150) UNIQUE NOT NULL,
     senha VARCHAR(255) NOT NULL,
-    foto_perfil VARCHAR(255),           -- novo campo para foto
-    especialidade VARCHAR(100),         -- novo campo para especialidade
-    descricao TEXT,                     -- novo campo para descrição
+    foto_perfil VARCHAR(255) NOT NULL,        -- foto obrigatória
+    especialidade VARCHAR(100) NOT NULL,      -- especialidade obrigatória
+    descricao TEXT NOT NULL,                  -- descrição obrigatória
+    perfil_publico TINYINT(1) DEFAULT 0,      -- 1 = público | 0 = privado
     data_cadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+) ;
 
 
+-- Tabela de pacientes
 CREATE TABLE pacientes (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
@@ -21,12 +25,12 @@ CREATE TABLE pacientes (
     telefone VARCHAR(11) NOT NULL,
     email VARCHAR(150) UNIQUE NOT NULL,
     senha VARCHAR(255) NOT NULL,
-    foto_perfil VARCHAR(255),           -- novo campo para foto
-    dificuldade VARCHAR(100),         -- novo campo para especialidade
-    descricao TEXT,                     -- novo campo para descrição
+    foto_perfil VARCHAR(255) NOT NULL,        -- foto obrigatória
+    dificuldade VARCHAR(100) NOT NULL,        -- dificuldade obrigatória
+    descricao TEXT NOT NULL,                  -- descrição obrigatória
+    perfil_publico TINYINT(1) DEFAULT 0,      -- 1 = público | 0 = privado
     data_cadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
 
 CREATE TABLE vinculos_profissionais_pacientes (
     id INT AUTO_INCREMENT PRIMARY KEY,

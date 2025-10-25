@@ -15,12 +15,13 @@ $tipo = $_SESSION['usuario_tipo'];
 $tabela = ($tipo === 'profissional') ? 'profissionais' : 'pacientes';
 
 // Recebe dados do formulário
-$nome = $_POST['nome'] ?? '';
-$sobrenome = $_POST['sobrenome'] ?? '';
-$telefone = $_POST['telefone'] ?? '';
+$nome = trim($_POST['nome'] ?? '');
+$sobrenome = trim($_POST['sobrenome'] ?? '');
+$telefone = trim($_POST['telefone'] ?? '');
 $especialidade = $_POST['especialidade'] ?? null;
-$descricao = $_POST['descricao'] ?? null;
 $dificuldade = $_POST['dificuldade'] ?? null;
+$descricao = trim($_POST['descricao'] ?? '');
+$perfil_publico = isset($_POST['perfil_publico']) ? 1 : 0; // Checkbox
 
 // Caminho base para salvar as imagens
 $pastaDestino = "uploads/";
@@ -28,10 +29,9 @@ if (!is_dir($pastaDestino)) {
     mkdir($pastaDestino, 0755, true);
 }
 
-// Variável que vai guardar o nome do novo arquivo (se existir upload)
 $foto_perfil = null;
 
-// 🔹 Se o usuário enviou uma nova foto
+// ====== UPLOAD DA FOTO DE PERFIL ======
 if (isset($_FILES['foto']) && $_FILES['foto']['error'] === 0) {
     $extensao = strtolower(pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION));
     $permitidos = ['jpg', 'jpeg', 'png', 'gif'];
@@ -40,11 +40,10 @@ if (isset($_FILES['foto']) && $_FILES['foto']['error'] === 0) {
         $novoNome = "foto_" . $id . "_" . time() . "." . $extensao;
         $destino = $pastaDestino . $novoNome;
 
-        // Move o arquivo para a pasta de destino
         if (move_uploaded_file($_FILES['foto']['tmp_name'], $destino)) {
             $foto_perfil = $novoNome;
 
-            // Remove imagem antiga (se existir)
+            // Apaga imagem antiga se existir
             $sqlAntiga = "SELECT foto_perfil FROM $tabela WHERE id = ?";
             $stmtAntiga = $conn->prepare($sqlAntiga);
             $stmtAntiga->bind_param("i", $id);
@@ -55,59 +54,70 @@ if (isset($_FILES['foto']) && $_FILES['foto']['error'] === 0) {
                 unlink($pastaDestino . $resAntiga['foto_perfil']);
             }
         } else {
-            echo "<div class='alert alert-danger'>Erro ao mover o arquivo!</div>";
+            $_SESSION['mensagem'] = "<div class='alert alert-danger'>Erro ao mover o arquivo de imagem.</div>";
+            header("Location: telaProfissional.php");
             exit();
         }
     } else {
-        echo "<div class='alert alert-danger'>Formato de imagem não permitido! Envie JPG, PNG ou GIF.</div>";
+        $_SESSION['mensagem'] = "<div class='alert alert-danger'>Formato inválido! Use JPG, PNG ou GIF.</div>";
+        header("Location: telaProfissional.php");
         exit();
     }
 }
 
-// 🔹 Monta o SQL de atualização conforme o tipo de usuário
+// ====== VALIDAÇÃO BÁSICA ======
+if (empty($nome) || empty($sobrenome) || empty($descricao) ||
+    ($tipo === 'profissional' && empty($especialidade)) ||
+    ($tipo === 'paciente' && empty($dificuldade))) {
+
+    $_SESSION['mensagem'] = "<div class='alert alert-warning text-center mt-3'>Preencha todos os campos obrigatórios antes de salvar.</div>";
+    header("Location: telaProfissional.php");
+    exit();
+}
+
+// ====== MONTA O SQL CONFORME O TIPO ======
 if ($tipo === 'profissional') {
     $sql = "UPDATE profissionais 
-            SET nome = ?, sobrenome = ?, telefone = ?, especialidade = ?, descricao = ?";
+            SET nome = ?, sobrenome = ?, telefone = ?, especialidade = ?, descricao = ?, perfil_publico = ?";
 
-    if ($foto_perfil) {
-        $sql .= ", foto_perfil = ?";
-    }
-
+    if ($foto_perfil) $sql .= ", foto_perfil = ?";
     $sql .= " WHERE id = ?";
+
     $stmt = $conn->prepare($sql);
 
     if ($foto_perfil) {
-        $stmt->bind_param("ssssssi", $nome, $sobrenome, $telefone, $especialidade, $descricao, $foto_perfil, $id);
+        $stmt->bind_param("sssssssi", $nome, $sobrenome, $telefone, $especialidade, $descricao, $perfil_publico, $foto_perfil, $id);
     } else {
-        $stmt->bind_param("sssssi", $nome, $sobrenome, $telefone, $especialidade, $descricao, $id);
+        $stmt->bind_param("ssssssi", $nome, $sobrenome, $telefone, $especialidade, $descricao, $perfil_publico, $id);
     }
 
-} else { // Paciente
+} else {
     $sql = "UPDATE pacientes 
-            SET nome = ?, sobrenome = ?, telefone = ?, dificuldade = ?, descricao = ?";
+            SET nome = ?, sobrenome = ?, telefone = ?, dificuldade = ?, descricao = ?, perfil_publico = ?";
 
-    if ($foto_perfil) {
-        $sql .= ", foto_perfil = ?";
-    }
-
+    if ($foto_perfil) $sql .= ", foto_perfil = ?";
     $sql .= " WHERE id = ?";
+
     $stmt = $conn->prepare($sql);
 
     if ($foto_perfil) {
-        $stmt->bind_param("ssssssi", $nome, $sobrenome, $telefone, $dificuldade, $descricao, $foto_perfil, $id);
+        $stmt->bind_param("sssssssi", $nome, $sobrenome, $telefone, $dificuldade, $descricao, $perfil_publico, $foto_perfil, $id);
     } else {
-        $stmt->bind_param("sssssi", $nome, $sobrenome, $telefone, $dificuldade, $descricao, $id);
+        $stmt->bind_param("ssssssi", $nome, $sobrenome, $telefone, $dificuldade, $descricao, $perfil_publico, $id);
     }
 }
 
-// Executa o update
+// ====== EXECUTA O UPDATE ======
 if ($stmt->execute()) {
     $_SESSION['mensagem'] = "<div class='alert alert-success text-center mt-3'>Perfil atualizado com sucesso!</div>";
 } else {
     $_SESSION['mensagem'] = "<div class='alert alert-danger text-center mt-3'>Erro ao atualizar o perfil.</div>";
 }
 
-// Redireciona de volta para o perfil
+// ====== REDIRECIONAMENTO CORRETO ======
+
 header("Location: telaProfissional.php");
+
+
 exit();
 ?>

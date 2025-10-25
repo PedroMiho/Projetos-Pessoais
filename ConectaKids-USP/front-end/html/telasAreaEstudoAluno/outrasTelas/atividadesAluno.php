@@ -138,9 +138,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['atividade_id'])) {
                 <?php
                 // Define o link correto conforme o tipo de usuário
                 if ($_SESSION['usuario_tipo'] === 'profissional') {
-                  $linkEstudos = "html/telasAreaEstudo/areaEstudo.php";
+                  $linkEstudos = "../../telasAreaEstudoAluno/areaEstudoAluno.php";
                 } else {
-                  $linkUsuario = $linkEstudos = "html/telasAreaEstudoAluno/areaEstudoAluno.php";
+                  $linkUsuario = $linkEstudos = "../../telasAreaEstudoAluno/areaEstudoAluno.php";
                 }
                 ?>
                 <a class="nav-link text-white d-flex align-items-center fs-5" href="<?php echo $linkUsuario; ?>">

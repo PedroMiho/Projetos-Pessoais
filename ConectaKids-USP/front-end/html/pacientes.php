@@ -2,9 +2,14 @@
 session_start();
 include("../../back-end/conexao.php");
 
-// Consulta pacientes
+// Consulta pacientes (somente públicos e com dados obrigatórios)
 try {
-  $sql = "SELECT nome, email, telefone, dificuldade, foto_perfil, descricao FROM pacientes";
+  $sql = "SELECT nome, email, telefone, dificuldade, foto_perfil, descricao 
+          FROM pacientes
+          WHERE perfil_publico = 1
+            AND foto_perfil IS NOT NULL AND foto_perfil <> ''
+            AND dificuldade IS NOT NULL AND dificuldade <> ''
+            AND descricao IS NOT NULL AND descricao <> ''";
   $stmt = $conn->prepare($sql);
   $stmt->execute();
   $resultado = $stmt->get_result();
@@ -142,7 +147,7 @@ if ($usuario_logado) {
                 if ($_SESSION['usuario_tipo'] === 'profissional') {
                   $linkUsuario = "telasAreaEstudo/areaEstudosProfissional.php";
                 } else {
-                  $linkUsuario = "telasAreaEstudoAluno/areaEstudoAluno.php";;
+                  $linkUsuario = "telasAreaEstudoAluno/areaEstudoAluno.php";
                 }
                 ?>
                 <a class="nav-link text-white d-flex align-items-center fs-5" href="<?php echo $linkUsuario; ?>">
@@ -192,7 +197,7 @@ if ($usuario_logado) {
           ";
         }
       } else {
-        echo "<p class='text-center text-muted'>Nenhum paciente cadastrado ainda.</p>";
+        echo "<p class='text-center text-muted'>Nenhum paciente público cadastrado no momento.</p>";
       }
       ?>
     </div>
