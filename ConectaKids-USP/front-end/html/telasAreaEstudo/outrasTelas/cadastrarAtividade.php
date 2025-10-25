@@ -255,7 +255,12 @@ footer { background-color: #3e2723; color: white; padding: 1.5rem 0; text-align:
               <td><?= $atv['data_inicio'] ?></td>
               <td><?= $atv['data_encerramento'] ?></td>
               <td><a href="<?= $atv['arquivo_pdf'] ?>" target="_blank" class="btn btn-outline-dark btn-sm"><i class="bi bi-file-earmark-pdf"></i> Abrir</a></td>
-              <td><?= (strtotime($atv['data_encerramento']) < time()) ? '<span class="text-danger">Encerrada</span>' : '<span class="text-success">Em andamento</span>' ?></td>
+              <td>
+                <?= (strtotime($atv['data_encerramento']) < strtotime(date('Y-m-d'))) 
+                  ? '<span class="text-danger">Encerrada</span>' 
+                  : '<span class="text-success">Em andamento</span>' ?>
+              </td>
+
               <td>
                 <!-- Excluir -->
                 <form method="POST" class="d-inline">
