@@ -36,13 +36,19 @@
   }
   .remove-letter{
     position:absolute;
-    top:0px;
-    right:0px;
+    top:0;
+    right:0;
+    width:20px;
+    height:20px;
     font-size:16px;
     font-weight:bold;
-    color:var(--danger);
+    color:white;
+    background:var(--danger);
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
     cursor:pointer;
-    padding:2px 4px;
   }
   .letters{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;}
   .letter-btn{
@@ -100,6 +106,7 @@ const palavras = [
 let indice = 0;
 let resposta = [];
 let palavraAtual = palavras[indice];
+let perdeu = false; // Flag para impedir remover letras após erro
 
 // ===== ELEMENTOS =====
 const emojiEl = document.getElementById('emoji');
@@ -124,6 +131,7 @@ function embaralhar(array) {
 
 // ===== INICIAR JOGO =====
 function iniciarRodada() {
+  perdeu = false;
   const { palavra, emoji } = palavraAtual;
   resposta = [];
   emojiEl.textContent = emoji;
@@ -131,14 +139,12 @@ function iniciarRodada() {
   slotsEl.innerHTML = "";
   lettersEl.innerHTML = "";
 
-  // Cria os espaços da palavra
   for (let i = 0; i < palavra.length; i++) {
     const div = document.createElement('div');
     div.classList.add('slot');
     slotsEl.appendChild(div);
   }
 
-  // Cria as letras embaralhadas
   const letras = embaralhar(palavra.split(''));
   letras.forEach(letra => {
     const btn = document.createElement('button');
@@ -151,22 +157,22 @@ function iniciarRodada() {
 
 // ===== SELECIONAR LETRA =====
 function selecionarLetra(btn, letra) {
+  if (perdeu) return; // não permite mais selecionar após erro
+
   const slots = document.querySelectorAll('.slot');
   const index = resposta.length;
 
   if (index < slots.length) {
     resposta.push({letra, indexBtn: btn});
     
-    // Adiciona letra ao slot
     const slot = slots[index];
     slot.textContent = letra;
 
-    // Adiciona botão "X" no slot
     const removeBtn = document.createElement('span');
     removeBtn.textContent = "×";
     removeBtn.className = "remove-letter";
     removeBtn.addEventListener('click', () => {
-      removerLetra(index);
+      if (!perdeu) removerLetra(index);
     });
     slot.appendChild(removeBtn);
 
@@ -181,27 +187,27 @@ function selecionarLetra(btn, letra) {
 
 // ===== REMOVER LETRA =====
 function removerLetra(slotIndex) {
+  if (perdeu) return;
+
   const slots = document.querySelectorAll('.slot');
-  const letraObjIndex = resposta.findIndex(r => r.indexBtn === slots[slotIndex].querySelector('.remove-letter').parentNode.querySelector('span') || true);
   const letraObj = resposta[slotIndex];
   if (!letraObj) return;
 
-  // Habilita o botão correspondente
   letraObj.indexBtn.disabled = false;
   letraObj.indexBtn.style.opacity = "1";
 
-  // Remove do slot e da resposta
   slots[slotIndex].textContent = '';
   resposta.splice(slotIndex, 1);
 
-  // Recria os X nos slots restantes
   slots.forEach((slot, i) => {
     slot.textContent = resposta[i] ? resposta[i].letra : '';
     if (resposta[i]) {
       const removeBtn = document.createElement('span');
       removeBtn.textContent = "×";
       removeBtn.className = "remove-letter";
-      removeBtn.addEventListener('click', () => removerLetra(i));
+      removeBtn.addEventListener('click', () => {
+        if (!perdeu) removerLetra(i);
+      });
       slot.appendChild(removeBtn);
     }
   });
@@ -218,11 +224,11 @@ function verificarResposta() {
     falar("Parabéns! A palavra é " + palavraAtual.palavra);
     document.querySelectorAll('.slot').forEach(s => s.classList.add('correct'));
   } else {
+    perdeu = true;
     mensagemEl.textContent = "Ops! Tente novamente! 😅";
     mensagemEl.style.color = "#c62828";
     falar("Ops! Tente novamente");
 
-    // Marca os slots errados
     const slots = document.querySelectorAll('.slot');
     slots.forEach((s, i) => {
       const letra = resposta[i] ? resposta[i].letra : '';
@@ -232,6 +238,28 @@ function verificarResposta() {
         s.classList.remove('wrong');
       }
     });
+
+    if (!document.getElementById('tentarBtn')) {
+      const tentarBtn = document.createElement('button');
+      tentarBtn.id = "tentarBtn";
+      tentarBtn.textContent = "Tentar novamente";
+      tentarBtn.className = "btn btn-outline-warning mt-2";
+      tentarBtn.addEventListener('click', () => {
+        resposta = [];
+        perdeu = false;
+        slots.forEach(s => {
+          s.textContent = '';
+          s.classList.remove('wrong');
+        });
+        lettersEl.querySelectorAll('button').forEach(b => {
+          b.disabled = false;
+          b.style.opacity = "1";
+        });
+        mensagemEl.textContent = "";
+        tentarBtn.remove();
+      });
+      mensagemEl.appendChild(tentarBtn);
+    }
   }
 }
 
