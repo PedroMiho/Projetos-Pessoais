@@ -24,6 +24,7 @@ $valueSenha = $_COOKIE['senha'] ?? '';
   <style>
     body {
       background-color: #efebe9;
+      overflow: hidden;
     }
 
     .mensagem {

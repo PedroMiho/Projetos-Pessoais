@@ -134,7 +134,7 @@ if (!isset($_SESSION['usuario_id']) || !isset($_SESSION['usuario_tipo'])) {
 
         <!-- Área de Jogos -->
         <div class="col-md-5 col-lg-3">
-          <div class="card card-opcao p-4 h-100" onclick="window.location.href='areaJogos.php'">
+          <div class="card card-opcao p-4 h-100" onclick="window.location.href='outrasTelas/areaJogos.php'">
             <div class="icon-container"><i class="bi bi-controller"></i></div>
             <h5>Acessar Área de Jogos</h5>
             <p>Explore jogos educativos que ajudam na evolução do seu aprendizado.</p>
