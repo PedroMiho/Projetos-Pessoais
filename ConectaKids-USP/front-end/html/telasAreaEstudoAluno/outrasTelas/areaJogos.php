@@ -155,10 +155,10 @@ if (!estaLogado() || $_SESSION['usuario_tipo'] !== 'paciente') {
 
       <!-- Jogo 6 -->
       <div class="col-md-4">
-        <div class="card card-game text-center p-4 h-100" onclick="window.location.href='jogos/emocoes.html'">
-          <div class="card-icon"><i class="bi bi-emoji-smile"></i></div>
-          <h5 class="fw-bold" style="color:#3e2723">Reconhecendo Emoções</h5>
-          <p class="text-muted mb-0">Aprenda a identificar expressões e emoções de forma divertida e educativa!</p>
+        <div class="card card-game text-center p-4 h-100" onclick="window.location.href='../jogosEducativos/palavra/palavra2.html'">
+          <div class="card-icon"><i class="bi bi-chat-right-dots"></i></div>
+          <h5 class="fw-bold" style="color:#3e2723">Monte a Palavra 2.0</h5>
+          <p class="text-muted mb-0">Arraste as letras para formar palavras corretas e melhore sua ortografia!</p>
         </div>
       </div>
     </div>

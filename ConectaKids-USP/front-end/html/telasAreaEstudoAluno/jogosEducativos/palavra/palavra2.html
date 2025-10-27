@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Monte a Palavra - Estilo Wordle</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+:root{
+  --brand:#6d4c41;
+  --green:#2e7d32;
+  --yellow:#f9a825;
+  --gray:#9e9e9e;
+  --bg:#fff8f5;
+  --dark:#3e2723;
+}
+body{
+  background:var(--bg);
+  font-family:system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  min-height:100vh;
+  padding:2rem 1rem;
+}
+h1{color:var(--dark); margin-bottom:1rem;}
+.grid{display:grid; gap:6px; margin-bottom:12px;}
+.row{display:flex; gap:6px;}
+.slot{
+  width:56px; height:56px; display:flex; align-items:center; justify-content:center;
+  font-weight:800; font-size:24px; border:2px solid var(--brand); border-radius:8px;
+  background:white; transition:background .25s, transform .15s;
+}
+.slot.filled{transform:translateY(-2px);}
+.correct{background:var(--green); color:white; border:none;}
+.present{background:var(--yellow); color:white; border:none;}
+.absent{background:var(--gray); color:white; border:none;}
+
+.keyboard{display:flex; flex-direction:column; gap:8px; justify-content:center; margin-bottom:12px; width:100%; max-width:420px;}
+.keyboard-row{display:flex; gap:8px; justify-content:center;}
+.letter-btn{
+  width:56px; height:48px; border-radius:8px; border:none;
+  background:var(--brand); color:white; font-weight:700; cursor:pointer; transition:opacity .12s;
+  display:flex; justify-content:center; align-items:center;
+  font-size:18px;
+}
+.letter-btn.small{width:40px; font-size:14px;}
+.letter-btn:disabled{opacity:.45; cursor:not-allowed;}
+.btn-submit{margin-bottom:8px;}
+.container-game{width:100%; max-width:560px; text-align:center;}
+.controls{display:flex; gap:8px; justify-content:center; margin-top:8px;}
+.mensagem{margin-top:8px; font-weight:700; min-height:28px;}
+#btnNext{display:none;}
+</style>
+</head>
+<body>
+  <div class="container-game">
+    <h1>Monte a Palavra</h1>
+    <div id="emoji" style="font-size:64px; margin-bottom:10px;">🐱</div>
+    <div id="grid" class="grid" aria-live="polite"></div>
+
+    <div id="letters" class="keyboard" aria-label="Teclado"></div>
+
+    <div class="controls">
+      <button class="btn btn-primary btn-submit" id="submitBtn">Enviar</button>
+      <button class="btn btn-outline-success" id="btnNext">Próxima Palavra</button>
+      <button class="btn btn-outline-secondary" id="btnReset">Reiniciar</button>
+    </div>
+
+    <div id="mensagem" class="mensagem"></div>
+  </div>
+
+<script>
+const palavras = [
+  { palavra: "GATO", emoji: "🐱" },
+  { palavra: "SOL", emoji: "☀️" },
+  { palavra: "CASA", emoji: "🏠" },
+  { palavra: "PEIXE", emoji: "🐟" },
+  { palavra: "FLOR", emoji: "🌸" }
+];
+const alfabeto = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('');
+const tentativasMax = 5;
+
+let indice = 0;
+let palavraAtual = palavras[indice].palavra;
+let linhaAtual = 0;
+
+const gridEl = document.getElementById('grid');
+const lettersEl = document.getElementById('letters');
+const submitBtn = document.getElementById('submitBtn');
+const btnNext = document.getElementById('btnNext');
+const btnReset = document.getElementById('btnReset');
+const mensagemEl = document.getElementById('mensagem');
+const emojiEl = document.getElementById('emoji');
+
+function iniciar() {
+  palavraAtual = palavras[indice].palavra;
+  emojiEl.textContent = palavras[indice].emoji;
+  gridEl.innerHTML = "";
+  lettersEl.innerHTML = "";
+  linhaAtual = 0;
+  mensagemEl.textContent = "";
+  submitBtn.disabled = false;
+  btnNext.style.display = "none";
+
+  // Grid
+  for (let i = 0; i < tentativasMax; i++) {
+    const row = document.createElement('div');
+    row.className = 'row';
+    row.dataset.row = i;
+    for (let j = 0; j < palavraAtual.length; j++) {
+      const slot = document.createElement('div');
+      slot.className = 'slot';
+      slot.dataset.col = j;
+      row.appendChild(slot);
+    }
+    gridEl.appendChild(row);
+  }
+
+  // Teclado
+  for (let i = 0; i < alfabeto.length; i += 6) {
+    const rowDiv = document.createElement('div');
+    rowDiv.className = 'keyboard-row';
+    for (let j = i; j < i + 6 && j < alfabeto.length; j++) {
+      const btn = document.createElement('button');
+      btn.className = 'letter-btn';
+      btn.type = 'button';
+      btn.textContent = alfabeto[j];
+      btn.dataset.letter = alfabeto[j];
+      btn.addEventListener('click', () => onLetterClick(alfabeto[j]));
+      rowDiv.appendChild(btn);
+    }
+    lettersEl.appendChild(rowDiv);
+  }
+}
+
+function onLetterClick(letra) {
+  const row = gridEl.children[linhaAtual];
+  if (!row) return;
+  const slots = Array.from(row.children);
+  const empty = slots.find(s => !s.textContent);
+  if (!empty) return;
+  empty.textContent = letra;
+  empty.classList.add('filled');
+}
+
+function enviarTentativa() {
+  const row = gridEl.children[linhaAtual];
+  const slots = Array.from(row.children);
+  const tentativa = slots.map(s => s.textContent || '').join('');
+  if (tentativa.length !== palavraAtual.length) {
+    mensagemEl.textContent = "Preencha toda a palavra!";
+    return;
+  }
+
+  submitBtn.disabled = true;
+  disableKeyboard(true);
+
+  const palavraArr = palavraAtual.split('');
+  const contagem = {};
+  palavraArr.forEach(l => contagem[l] = (contagem[l] || 0) + 1);
+
+  slots.forEach((slot, i) => {
+    const letra = slot.textContent;
+    if (letra === palavraArr[i]) {
+      slot.classList.add('correct');
+      contagem[letra]--;
+    }
+  });
+  slots.forEach((slot, i) => {
+    const letra = slot.textContent;
+    if (slot.classList.contains('correct')) return;
+    if (contagem[letra] > 0) {
+      slot.classList.add('present');
+      contagem[letra]--;
+    } else {
+      slot.classList.add('absent');
+    }
+  });
+
+  // mostra botão "Próxima Palavra"
+  btnNext.style.display = "inline-block";
+
+  if (tentativa === palavraAtual) {
+    mensagemEl.textContent = "Parabéns! Você acertou!";
+  } else {
+    linhaAtual++;
+    if (linhaAtual >= tentativasMax) {
+      mensagemEl.textContent = `Fim das tentativas! A palavra era: ${palavraAtual}`;
+    } else {
+      mensagemEl.textContent += ` Tentativa incorreta. Restam ${tentativasMax - linhaAtual} tentativas.`;
+    }
+  }
+}
+
+function proximaPalavra() {
+  indice++;
+  if (indice >= palavras.length) {
+    mensagemEl.textContent = "Fim do jogo! Você completou todas as palavras! 🥳";
+    btnNext.style.display = "none";
+    submitBtn.disabled = true;
+    disableKeyboard(true);
+    return;
+  }
+  iniciar();
+}
+
+function disableKeyboard(disabled) {
+  lettersEl.querySelectorAll('button').forEach(b => b.disabled = disabled);
+}
+
+submitBtn.addEventListener('click', enviarTentativa);
+btnNext.addEventListener('click', proximaPalavra);
+btnReset.addEventListener('click', () => { indice = 0; iniciar(); });
+
+iniciar();
+</script>
+</body>
+</html>

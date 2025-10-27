@@ -89,7 +89,6 @@
 <footer class="text-center small py-2">© 2025 ConectaKids - Aprendizado lúdico</footer>
 
 <script>
-// ===== PALAVRAS DO JOGO =====
 const palavras = [
   { palavra: "GATO", emoji: "🐱" },
   { palavra: "SOL", emoji: "☀️" },
@@ -106,9 +105,9 @@ const palavras = [
 let indice = 0;
 let resposta = [];
 let palavraAtual = palavras[indice];
-let perdeu = false; // Flag para impedir remover letras após erro
+let perdeu = false;
+let finalizou = false; // true se acertou ou errou a palavra
 
-// ===== ELEMENTOS =====
 const emojiEl = document.getElementById('emoji');
 const slotsEl = document.getElementById('slots');
 const lettersEl = document.getElementById('letters');
@@ -116,7 +115,6 @@ const mensagemEl = document.getElementById('mensagem');
 const btnNext = document.getElementById('btnNext');
 const btnReset = document.getElementById('btnReset');
 
-// ===== FUNÇÃO PARA FALAR =====
 function falar(texto) {
   const utter = new SpeechSynthesisUtterance(texto);
   utter.lang = "pt-BR";
@@ -124,14 +122,13 @@ function falar(texto) {
   speechSynthesis.speak(utter);
 }
 
-// ===== EMBARALHAR LETRAS =====
 function embaralhar(array) {
   return array.sort(() => Math.random() - 0.5);
 }
 
-// ===== INICIAR JOGO =====
 function iniciarRodada() {
   perdeu = false;
+  finalizou = false;
   const { palavra, emoji } = palavraAtual;
   resposta = [];
   emojiEl.textContent = emoji;
@@ -155,9 +152,8 @@ function iniciarRodada() {
   });
 }
 
-// ===== SELECIONAR LETRA =====
 function selecionarLetra(btn, letra) {
-  if (perdeu) return; // não permite mais selecionar após erro
+  if (perdeu || finalizou) return;
 
   const slots = document.querySelectorAll('.slot');
   const index = resposta.length;
@@ -172,7 +168,7 @@ function selecionarLetra(btn, letra) {
     removeBtn.textContent = "×";
     removeBtn.className = "remove-letter";
     removeBtn.addEventListener('click', () => {
-      if (!perdeu) removerLetra(index);
+      if (!perdeu && !finalizou) removerLetra(index);
     });
     slot.appendChild(removeBtn);
 
@@ -185,9 +181,8 @@ function selecionarLetra(btn, letra) {
   }
 }
 
-// ===== REMOVER LETRA =====
 function removerLetra(slotIndex) {
-  if (perdeu) return;
+  if (perdeu || finalizou) return;
 
   const slots = document.querySelectorAll('.slot');
   const letraObj = resposta[slotIndex];
@@ -201,22 +196,24 @@ function removerLetra(slotIndex) {
 
   slots.forEach((slot, i) => {
     slot.textContent = resposta[i] ? resposta[i].letra : '';
-    if (resposta[i]) {
+    if (resposta[i] && !finalizou && !perdeu) {
       const removeBtn = document.createElement('span');
       removeBtn.textContent = "×";
       removeBtn.className = "remove-letter";
       removeBtn.addEventListener('click', () => {
-        if (!perdeu) removerLetra(i);
+        if (!perdeu && !finalizou) removerLetra(i);
       });
       slot.appendChild(removeBtn);
     }
   });
 }
 
-// ===== VERIFICAR RESPOSTA =====
 function verificarResposta() {
   const palavraFormada = resposta.map(r => r.letra).join('');
   const correta = palavraFormada === palavraAtual.palavra;
+  finalizou = true; // impede remoção de letras
+
+  document.querySelectorAll('.remove-letter').forEach(x => x.remove()); // remove todos os X
 
   if (correta) {
     mensagemEl.textContent = "Parabéns! Você acertou! 🎉";
@@ -232,11 +229,7 @@ function verificarResposta() {
     const slots = document.querySelectorAll('.slot');
     slots.forEach((s, i) => {
       const letra = resposta[i] ? resposta[i].letra : '';
-      if (letra !== palavraAtual.palavra[i]) {
-        s.classList.add('wrong');
-      } else {
-        s.classList.remove('wrong');
-      }
+      if (letra !== palavraAtual.palavra[i]) s.classList.add('wrong');
     });
 
     if (!document.getElementById('tentarBtn')) {
@@ -247,6 +240,7 @@ function verificarResposta() {
       tentarBtn.addEventListener('click', () => {
         resposta = [];
         perdeu = false;
+        finalizou = false;
         slots.forEach(s => {
           s.textContent = '';
           s.classList.remove('wrong');
@@ -263,7 +257,6 @@ function verificarResposta() {
   }
 }
 
-// ===== PRÓXIMA PALAVRA =====
 btnNext.addEventListener('click', () => {
   indice++;
   if (indice >= palavras.length) {
@@ -275,7 +268,6 @@ btnNext.addEventListener('click', () => {
   iniciarRodada();
 });
 
-// ===== REINICIAR =====
 btnReset.addEventListener('click', () => {
   indice = 0;
   palavraAtual = palavras[indice];
@@ -284,7 +276,6 @@ btnReset.addEventListener('click', () => {
   falar("O jogo foi reiniciado");
 });
 
-// ===== INÍCIO =====
 iniciarRodada();
 </script>
 
