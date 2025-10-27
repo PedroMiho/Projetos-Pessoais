@@ -25,7 +25,7 @@ $atividades = [];
 if (isset($_GET['aluno'])) {
   $aluno_id = $_GET['aluno'];
   $sqlAtividades = "
-    SELECT a.id, a.nome_atividade, a.descricao, a.data_inicio, a.data_encerramento, 
+    SELECT a.id, a.nome_atividade, a.descricao, a.arquivo_pdf, a.data_inicio, a.data_encerramento, 
            e.id AS entrega_id, e.arquivo_entregue, e.data_entrega, e.nota
     FROM atividades a
     LEFT JOIN entregas_atividades e ON e.atividade_id = a.id AND e.paciente_id = ?
@@ -47,18 +47,37 @@ if (isset($_GET['aluno'])) {
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
   <style>
-    body { background-color: #f7f3f0; display: flex; flex-direction: column; min-height: 100vh; }
+    body {
+      background-color: #f7f3f0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
     main { flex: 1; }
-    footer { background-color: #3e2723; color: white; padding: 1.5rem 0; margin-top: auto; text-align: center; }
-    .foto-aluno { width: 100px; height: 100px; object-fit: cover; border-radius: 50%; border: 3px solid #6d4c41; }
+    footer {
+      background-color: #3e2723;
+      color: white;
+      padding: 1.5rem 0;
+      margin-top: auto;
+      text-align: center;
+    }
+    .foto-aluno {
+      width: 100px; height: 100px; object-fit: cover;
+      border-radius: 50%; border: 3px solid #6d4c41;
+    }
     .card-aluno:hover { transform: scale(1.05); cursor: pointer; }
-    .section-title { background-color: #6d4c41; color: white; padding: 10px; border-radius: 10px; }
-    .card-atividade { border-radius: 10px; border-left: 6px solid #6d4c41; margin-bottom: 10px; background-color: #fff; }
+    .section-title {
+      background-color: #6d4c41; color: white;
+      padding: 10px; border-radius: 10px;
+    }
+    .card-atividade {
+      border-radius: 10px; border-left: 6px solid #6d4c41;
+      margin-bottom: 10px; background-color: #fff;
+    }
   </style>
 </head>
-<body>
 
-<!-- Header -->
+<body>
 <header>
   <nav class="navbar navbar-expand-lg" style="background-color: #6d4c41">
     <div class="container-fluid">
@@ -79,14 +98,13 @@ if (isset($_GET['aluno'])) {
   </nav>
 </header>
 
-<!-- Main -->
 <main class="container py-5">
   <h2 class="text-center mb-4" style="color: #3e2723;">Acompanhamento de Atividades</h2>
 
   <?php if (!isset($_GET['aluno'])): ?>
     <div class="row justify-content-center">
       <h5 class="text-center mb-4" style="color: #3e2723;">Selecione um aluno para visualizar as atividades</h5>
-      <?php while ($aluno = $alunos->fetch_assoc()): 
+      <?php while ($aluno = $alunos->fetch_assoc()):
         $foto = !empty($aluno['foto_perfil']) && file_exists("../../telasProfissional/uploads/".$aluno['foto_perfil'])
           ? "../../telasProfissional/uploads/".$aluno['foto_perfil']
           : "../../../imagens/usuario-default.png";
@@ -102,17 +120,17 @@ if (isset($_GET['aluno'])) {
         </div>
       <?php endwhile; ?>
     </div>
-  <?php else: ?>
 
+  <?php else: ?>
     <?php
-      $sqlAluno = "SELECT nome, sobrenome, foto_perfil FROM pacientes WHERE id = ?";
-      $stmtA = $conn->prepare($sqlAluno);
-      $stmtA->bind_param("i", $aluno_id);
-      $stmtA->execute();
-      $alunoSel = $stmtA->get_result()->fetch_assoc();
-      $foto = !empty($alunoSel['foto_perfil']) && file_exists("../../telasProfissional/uploads/".$alunoSel['foto_perfil'])
-        ? "../../telasProfissional/uploads/".$alunoSel['foto_perfil']
-        : "../../../imagens/usuario-default.png";
+    $sqlAluno = "SELECT nome, sobrenome, foto_perfil FROM pacientes WHERE id = ?";
+    $stmtA = $conn->prepare($sqlAluno);
+    $stmtA->bind_param("i", $aluno_id);
+    $stmtA->execute();
+    $alunoSel = $stmtA->get_result()->fetch_assoc();
+    $foto = !empty($alunoSel['foto_perfil']) && file_exists("../../telasProfissional/uploads/".$alunoSel['foto_perfil'])
+      ? "../../telasProfissional/uploads/".$alunoSel['foto_perfil']
+      : "../../../imagens/usuario-default.png";
     ?>
 
     <div class="text-center mb-5">
@@ -122,42 +140,109 @@ if (isset($_GET['aluno'])) {
     </div>
 
     <?php
-      $entregues = [];
-      $andamento = [];
-      $vencidas = [];
-      $dataAtual = date('Y-m-d');
+    $entregues = [];
+    $andamento = [];
+    $vencidas = [];
+    $dataAtual = date('Y-m-d');
 
-      while ($atv = $atividades->fetch_assoc()) {
-        if (!empty($atv['arquivo_entregue'])) {
-          $entregues[] = $atv;
-        } elseif ($atv['data_encerramento'] < $dataAtual) {
-          $vencidas[] = $atv;
-        } else {
-          $andamento[] = $atv;
-        }
+    while ($atv = $atividades->fetch_assoc()) {
+      if (!empty($atv['arquivo_entregue'])) $entregues[] = $atv;
+      elseif ($atv['data_encerramento'] < $dataAtual) $vencidas[] = $atv;
+      else $andamento[] = $atv;
+    }
+
+    function renderAtividade($atv, $entregue = false) {
+      $dataInicio = date('d/m/Y', strtotime($atv['data_inicio']));
+      $dataFim = date('d/m/Y', strtotime($atv['data_encerramento']));
+      $statusEncerrada = strtotime($atv['data_encerramento']) < time();
+
+      echo "<div class='card card-atividade p-3 mb-3'>
+        <div class='d-flex justify-content-between align-items-start'>
+          <div>
+            <h5 class='mb-1'>".htmlspecialchars($atv['nome_atividade'])."</h5>
+            <p class='text-muted small mb-2'>".nl2br(htmlspecialchars($atv['descricao']))."</p>
+            <p class='mb-2'><strong>Início:</strong> $dataInicio | <strong>Encerramento:</strong> $dataFim</p>";
+
+      if (!empty($atv['arquivo_pdf'])) {
+        echo "<a href='{$atv['arquivo_pdf']}' target='_blank' class='btn btn-outline-dark btn-sm mb-2'>
+                <i class='bi bi-file-earmark-pdf'></i> PDF da Atividade
+              </a><br>";
       }
 
-      function renderAtividade($atv, $entregue = false) {
-        $dataInicio = date('d/m/Y', strtotime($atv['data_inicio']));
-        $dataFim = date('d/m/Y', strtotime($atv['data_encerramento']));
-        echo "<div class='card card-atividade p-3 mb-3'>
-                <h5>{$atv['nome_atividade']}</h5>
-                <p class='text-muted small'>{$atv['descricao']}</p>
-                <p><strong>Início:</strong> $dataInicio | <strong>Encerramento:</strong> $dataFim</p>";
-        if ($entregue) {
-          echo "<div class='d-flex align-items-center gap-3'>
-                  <a href='../../telasAreaEstudoAluno/outrasTelas/{$atv['arquivo_entregue']}' target='_blank' class='btn btn-outline-success btn-sm'>
-                    <i class='bi bi-file-earmark-pdf'></i> Ver PDF Entregue
-                  </a>
-                  <form method='POST' action='salvarNota.php' class='d-flex align-items-center gap-2'>
-                    <input type='hidden' name='entrega_id' value='{$atv['entrega_id']}'>
-                    <input type='number' name='nota' class='form-control form-control-sm' style='width: 120px; text-align: center; font-size: 1rem;' min='0' max='10' step='0.1'   value='".htmlspecialchars($atv['nota'] ?? '')."'  placeholder='Nota'>
-                    <button type='submit' class='btn btn-sm btn-primary'>Salvar Nota</button>
-                  </form>
+      if ($entregue) {
+        echo "<div class='d-flex align-items-center gap-3 mt-2'>
+          <a href='../../telasAreaEstudoAluno/outrasTelas/{$atv['arquivo_entregue']}' target='_blank' class='btn btn-outline-success btn-sm'>
+            <i class='bi bi-file-earmark-check'></i> Ver Entrega
+          </a>
+          <form method='POST' action='salvarNota.php' class='d-flex align-items-center gap-2'>
+            <input type='hidden' name='entrega_id' value='{$atv['entrega_id']}'>
+            <input type='number' name='nota' class='form-control form-control-sm' style='width: 90px; text-align:center;' 
+                   min='0' max='10' step='0.1' value='".htmlspecialchars($atv['nota'] ?? '')."' placeholder='Nota'>
+            <button type='submit' class='btn btn-sm btn-primary'>Salvar</button>
+          </form>
+        </div>";
+      }
+
+      echo "</div>";
+
+      echo "<div class='text-end'>
+        <button class='btn btn-sm btn-outline-primary me-2' data-bs-toggle='modal' data-bs-target='#editar{$atv['id']}'>
+          <i class='bi bi-pencil'></i>
+        </button>
+        <form method='POST' action='removerAtividade.php' class='d-inline'>
+          <input type='hidden' name='atividade_id' value='{$atv['id']}'>
+          <input type='hidden' name='paciente_id' value='{$_GET['aluno']}'>
+          <button type='submit' class='btn btn-sm btn-outline-danger' onclick='return confirm(\"Tem certeza que deseja remover esta atividade?\")'>
+            <i class='bi bi-trash'></i>
+          </button>
+        </form>
+      </div>";
+
+      echo "</div>";
+
+      // Modal de edição
+      echo "<div class='modal fade' id='editar{$atv['id']}' tabindex='-1'>
+        <div class='modal-dialog modal-dialog-centered'>
+          <div class='modal-content'>
+            <form method='POST' enctype='multipart/form-data' action='editarAtividade.php'>
+              <div class='modal-header'>
+                <h5 class='modal-title'>Editar Atividade</h5>
+                <button type='button' class='btn-close' data-bs-dismiss='modal'></button>
+              </div>
+              <div class='modal-body'>
+                <input type='hidden' name='atividade_id' value='{$atv['id']}'>
+                <input type='hidden' name='paciente_id' value='{$_GET['aluno']}'>
+                
+                <div class='mb-3'>
+                  <label class='form-label'>Nome da Atividade</label>
+                  <input type='text' name='nome_atividade' class='form-control' value='".htmlspecialchars($atv['nome_atividade'])."' required>
+                </div>
+                <div class='mb-3'>
+                  <label class='form-label'>Descrição</label>
+                  <textarea name='descricao' class='form-control' rows='3'>".htmlspecialchars($atv['descricao'])."</textarea>
+                </div>
+                <div class='mb-3'>
+                  <label class='form-label'>Nova Data de Encerramento</label>
+                  <input type='date' name='data_encerramento' class='form-control' value='".htmlspecialchars($atv['data_encerramento'])."' required>
                 </div>";
-        }
-        echo "</div>";
+
+      if (!$statusEncerrada) {
+        echo "<div class='mb-3'>
+          <label class='form-label'>Substituir PDF (opcional)</label>
+          <input type='file' name='arquivo_pdf' class='form-control' accept='application/pdf'>
+        </div>";
       }
+
+      echo "</div>
+            <div class='modal-footer'>
+              <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cancelar</button>
+              <button type='submit' class='btn btn-primary'>Salvar Alterações</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>";
+    }
     ?>
 
     <div class="mb-4">
@@ -181,12 +266,12 @@ if (isset($_GET['aluno'])) {
   <?php endif; ?>
 </main>
 
-<!-- Footer -->
 <footer>
   <div class="container small">
     <p class="mb-0">© 2025 Espaço Escuta - Todos os direitos reservados.</p>
   </div>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

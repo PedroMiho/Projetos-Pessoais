@@ -143,7 +143,7 @@ if (!isset($_SESSION['usuario_id']) || !isset($_SESSION['usuario_tipo'])) {
 
         <!-- Notas das Atividades -->
         <div class="col-md-5 col-lg-3">
-          <div class="card card-opcao p-4 h-100" onclick="window.location.href='notasAtividades.php'">
+          <div class="card card-opcao p-4 h-100" onclick="window.location.href='outrasTelas/notasAtividades.php'">
             <div class="icon-container"><i class="bi bi-bar-chart-line"></i></div>
             <h5>Notas das Atividades</h5>
             <p>Visualize suas notas e acompanhe seu progresso em cada atividade.</p>

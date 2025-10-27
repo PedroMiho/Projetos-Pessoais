@@ -1,41 +1,58 @@
 <?php
 session_start();
-include("../back-end/conexao.php"); // Inclua o arquivo de conexão
+include("../back-end/conexao.php");
 
-// Função para verificar login via sessão ou cookie
+// 🔹 Função para verificar login via sessão ou cookie
 function estaLogado()
 {
-  global $conn; // permite usar $conn dentro da função
+  global $conn;
 
+  // Se já estiver logado na sessão
   if (isset($_SESSION['usuario_id']) && isset($_SESSION['usuario_tipo'])) {
     return true;
-  } elseif (isset($_COOKIE['usuario_id'])) {
+  }
+
+  // Se houver cookie salvo
+  if (isset($_COOKIE['usuario_id']) && isset($_COOKIE['usuario_tipo'])) {
     $usuario_id = $_COOKIE['usuario_id'];
-    $sql = "SELECT id, nome, tipo FROM usuarios WHERE id = ?";
+    $usuario_tipo = $_COOKIE['usuario_tipo'];
+
+    // Busca conforme o tipo de usuário
+    if ($usuario_tipo === 'profissional') {
+      $sql = "SELECT id, nome FROM profissionais WHERE id = ?";
+    } else {
+      $sql = "SELECT id, nome FROM pacientes WHERE id = ?";
+    }
+
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $usuario_id);
     $stmt->execute();
     $result = $stmt->get_result();
+
     if ($result->num_rows === 1) {
       $row = $result->fetch_assoc();
       $_SESSION['usuario_id'] = $row['id'];
       $_SESSION['usuario_nome'] = $row['nome'];
-      $_SESSION['usuario_tipo'] = $row['tipo']; // salva tipo (profissional ou aluno)
+      $_SESSION['usuario_tipo'] = $usuario_tipo;
       return true;
     }
   }
+
   return false;
 }
 
-// Decide o link da Área de Estudos conforme tipo de usuário
+// 🔹 Define links de navegação conforme o tipo
 if (estaLogado()) {
   if ($_SESSION['usuario_tipo'] === 'profissional') {
     $linkEstudos = "html/telasAreaEstudo/areaEstudo.php";
-  } else { // aluno
+    $linkUsuario = "html/telasAreaEstudo/areaEstudo.php";
+  } else {
     $linkEstudos = "html/telasAreaEstudoAluno/areaEstudoAluno.php";
+    $linkUsuario = "html/telasAreaEstudoAluno/areaEstudoAluno.php";
   }
 } else {
   $linkEstudos = "html/telaLogin.php";
+  $linkUsuario = "html/telaLogin.php";
 }
 ?>
 
@@ -45,51 +62,38 @@ if (estaLogado()) {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tela Home</title>
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
-    rel="stylesheet"
-    crossorigin="anonymous" />
-  <link
-    rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" />
+  <title>ConectaKids - Página Inicial</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" />
 </head>
 
 <body>
-  <!-- Header da página -->
+  <!-- ====== HEADER ====== -->
   <header>
     <nav class="navbar navbar-expand-lg" style="background-color: #6d4c41">
       <div class="container-fluid">
         <a class="navbar-brand text-white fw-bold fs-5" href="#">ConectaKids</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          aria-controls="navbarNav" aria-expanded="false" aria-label="Alternar navegação">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav w-100">
-            <!-- Links à esquerda -->
             <li class="nav-item">
-              <a class="nav-link text-white active fs-5" aria-current="page" href="html/profissionais.php">Profissionais</a>
+              <a class="nav-link text-white active fs-5" href="html/profissionais.php">Profissionais</a>
             </li>
             <li class="nav-item">
               <a class="nav-link text-white fs-5" href="html/pacientes.php">Pacientes</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-white fs-5" href="<?php echo $linkEstudos; ?>">Área de Estudos</a>
+              <a class="nav-link text-white fs-5" href="<?= $linkEstudos; ?>">Área de Estudos</a>
             </li>
-            <!-- Login à direita -->
+
+            <!-- Perfil/Login à direita -->
             <li class="nav-item ms-auto">
               <?php if (estaLogado()): ?>
-                <?php
-                // Define o link correto conforme o tipo de usuário
-                if ($_SESSION['usuario_tipo'] === 'profissional') {
-                  $linkEstudos = "html/telasAreaEstudo/areaEstudo.php";
-                } else {
-                  $linkUsuario = $linkEstudos = "html/telasAreaEstudoAluno/areaEstudoAluno.php";
-                }
-                ?>
-                <a class="nav-link text-white d-flex align-items-center fs-5" href="<?php echo $linkUsuario; ?>">
-                  <i class="bi bi-person-circle me-1"></i> <?php echo htmlspecialchars($_SESSION['usuario_nome']); ?>
+                <a class="nav-link text-white d-flex align-items-center fs-5" href="<?= $linkUsuario; ?>">
+                  <i class="bi bi-person-circle me-1"></i> <?= htmlspecialchars($_SESSION['usuario_nome']); ?>
                 </a>
               <?php else: ?>
                 <a class="nav-link text-white d-flex align-items-center fs-5" href="html/telaLogin.php">
@@ -97,13 +101,13 @@ if (estaLogado()) {
                 </a>
               <?php endif; ?>
             </li>
-
           </ul>
         </div>
       </div>
     </nav>
   </header>
 
+  <!-- ====== MAIN ====== -->
   <main>
     <!-- Seção de apresentação -->
     <section class="py-5" style="background-color: #efebe9">
@@ -135,8 +139,7 @@ if (estaLogado()) {
                 <h5 class="card-title fw-bold" style="color: #6d4c41">Psicopedagogia</h5>
                 <p class="card-text text-muted">
                   Identificação e apoio nas dificuldades de aprendizagem,
-                  incluindo alfabetização, organização, concentração e
-                  acompanhamento de TDAH.
+                  incluindo alfabetização, organização e concentração.
                 </p>
               </div>
             </div>
@@ -148,9 +151,8 @@ if (estaLogado()) {
               <div class="card-body" style="background-color: #f5f2f0">
                 <h5 class="card-title fw-bold" style="color: #6d4c41">Neuropsicopedagogia</h5>
                 <p class="card-text text-muted">
-                  Atua na compreensão do funcionamento cognitivo, emocional e
-                  social da criança, auxiliando no diagnóstico e nas
-                  estratégias de aprendizagem de forma integrada.
+                  Atua na compreensão do funcionamento cognitivo e emocional,
+                  auxiliando no diagnóstico e nas estratégias de aprendizagem.
                 </p>
               </div>
             </div>
@@ -159,63 +161,52 @@ if (estaLogado()) {
       </div>
     </section>
 
-    <!-- Seção Principais Abordagens -->
+    <!-- Abordagens -->
     <section class="py-5" style="background-color: #ede7e3">
       <div class="container text-center">
         <h2 class="fw-bold mb-5" style="color: #3e2723">Principais Abordagens</h2>
         <div class="row g-4">
-          <!-- Card 1 -->
           <div class="col-md-6 col-lg-3">
             <div class="card h-100 shadow-sm border-0">
-              <img src="imagens/Terapia Cognitivo Comportamental.png" class="card-img-top" alt="Terapia Cognitivo Comportamental" />
+              <img src="imagens/Terapia Cognitivo Comportamental.png" class="card-img-top" alt="TCC" />
               <div class="card-body" style="background-color: #f5f2f0">
                 <h5 class="card-title fw-bold" style="color: #6d4c41">Terapia Cognitivo-Comportamental</h5>
                 <p class="card-text text-muted">
-                  Auxilia na modificação de pensamentos e comportamentos,
-                  promovendo autoestima e confiança, além de ser eficaz contra
-                  ansiedade e depressão.
+                  Ajuda na modificação de pensamentos e comportamentos,
+                  promovendo autoestima e confiança.
                 </p>
               </div>
             </div>
           </div>
-          <!-- Card 2 -->
           <div class="col-md-6 col-lg-3">
             <div class="card h-100 shadow-sm border-0">
               <img src="imagens/Psicanálise.png" class="card-img-top" alt="Psicanálise" />
               <div class="card-body" style="background-color: #f5f2f0">
                 <h5 class="card-title fw-bold" style="color: #6d4c41">Psicanálise</h5>
                 <p class="card-text text-muted">
-                  Baseada na escuta da criança e de sua família, ajuda a
-                  compreender demandas emocionais e sociais, favorecendo o
-                  desenvolvimento psíquico e relacional.
+                  Baseada na escuta da criança e da família, favorecendo o desenvolvimento psíquico e emocional.
                 </p>
               </div>
             </div>
           </div>
-          <!-- Card 3 -->
           <div class="col-md-6 col-lg-3">
             <div class="card h-100 shadow-sm border-0">
               <img src="imagens/ABA.png" class="card-img-top" alt="ABA" />
               <div class="card-body" style="background-color: #f5f2f0">
                 <h5 class="card-title fw-bold" style="color: #6d4c41">ABA (Análise do Comportamento)</h5>
                 <p class="card-text text-muted">
-                  Estimula habilidades comunicativas e sociais por meio da
-                  imitação, atenção compartilhada e brincadeiras funcionais,
-                  promovendo autonomia.
+                  Estimula habilidades comunicativas e sociais, promovendo autonomia e inclusão.
                 </p>
               </div>
             </div>
           </div>
-          <!-- Card 4 -->
           <div class="col-md-6 col-lg-3">
             <div class="card h-100 shadow-sm border-0">
               <img src="imagens/1e9cd91e-e49a-471d-88cd-d667e3bd9b60.webp" class="card-img-top" alt="Gestalt-terapia" />
               <div class="card-body" style="background-color: #f5f2f0">
                 <h5 class="card-title fw-bold" style="color: #6d4c41">Gestalt-terapia</h5>
                 <p class="card-text text-muted">
-                  Atendimento personalizado que acolhe a criança e a família,
-                  criando um ambiente de confiança para favorecer o
-                  crescimento emocional e social.
+                  Cria um ambiente de confiança para o crescimento emocional e social da criança.
                 </p>
               </div>
             </div>
@@ -224,27 +215,25 @@ if (estaLogado()) {
       </div>
     </section>
 
-    <!-- Seção escolha do usuário -->
+    <!-- Escolha -->
     <section class="py-5" style="background-color: #fff8f5">
       <div class="container text-center">
         <h2 class="fw-bold mb-4" style="color: #3e2723">Para quem você procura atendimento?</h2>
         <p class="text-muted mb-5">Escolha abaixo a opção que melhor se encaixa no seu perfil.</p>
         <div class="row g-4 justify-content-center">
-          <!-- Div Paciente -->
           <div class="col-md-6">
             <a href="html/pacientes.php" class="text-decoration-none">
-              <div class="p-5 rounded-4 shadow-sm h-100" style="background-color: #f5f2f0; transition: transform 0.3s ease, box-shadow 0.3s ease;">
+              <div class="p-5 rounded-4 shadow-sm h-100" style="background-color: #f5f2f0;">
                 <h3 class="fw-bold" style="color: #6d4c41">Sou Paciente</h3>
                 <p class="text-muted">Acesse informações, recursos e profissionais para auxiliar no seu desenvolvimento.</p>
               </div>
             </a>
           </div>
-          <!-- Div Profissional -->
           <div class="col-md-6">
             <a href="html/profissionais.php" class="text-decoration-none">
-              <div class="p-5 rounded-4 shadow-sm h-100" style="background-color: #f5f2f0; transition: transform 0.3s ease, box-shadow 0.3s ease;">
+              <div class="p-5 rounded-4 shadow-sm h-100" style="background-color: #f5f2f0;">
                 <h3 class="fw-bold" style="color: #6d4c41">Sou Profissional</h3>
-                <p class="text-muted">Cadastre-se e tenha acesso a um painel exclusivo para acompanhar seus atendimentos.</p>
+                <p class="text-muted">Cadastre-se e acompanhe seus atendimentos de forma prática.</p>
               </div>
             </a>
           </div>
@@ -253,16 +242,17 @@ if (estaLogado()) {
     </section>
   </main>
 
-  <!-- Footer -->
+  <!-- ====== FOOTER ====== -->
   <footer class="text-white pt-5 pb-3" style="background-color: #3e2723">
     <div class="container">
       <div class="row justify-content-between align-items-start text-center">
-        <!-- Sobre -->
         <div class="col-md-4 mb-4">
           <h5 class="fw-bold">Sobre Nós</h5>
-          <p class="small">Nosso propósito é conectar crianças e famílias a profissionais especializados, promovendo cuidado, desenvolvimento e inclusão de forma acessível e humanizada.</p>
+          <p class="small">
+            Nosso propósito é conectar crianças e famílias a profissionais especializados, promovendo cuidado,
+            desenvolvimento e inclusão de forma acessível e humanizada.
+          </p>
         </div>
-        <!-- Links úteis -->
         <div class="col-md-4 mb-4 d-flex flex-column align-items-center text-center">
           <h5 class="fw-bold">Links Úteis</h5>
           <ul class="list-unstyled small">
@@ -271,13 +261,12 @@ if (estaLogado()) {
             <li><a href="html/profissionais.php" class="text-white text-decoration-none">Profissionais</a></li>
           </ul>
         </div>
-        <!-- Redes sociais -->
         <div class="col-md-4 mb-4">
           <h5 class="fw-bold">Redes Sociais</h5>
           <p class="small">Acompanhe nossas novidades e conteúdos:</p>
-          <a href="https://instagram.com/seuInstagram" target="_blank" class="text-white me-3"><i class="bi bi-instagram fs-4"></i></a>
-          <a href="https://facebook.com/seuFacebook" target="_blank" class="text-white me-3"><i class="bi bi-facebook fs-4"></i></a>
-          <a href="https://wa.me/seuNumero" target="_blank" class="text-white"><i class="bi bi-whatsapp fs-4"></i></a>
+          <a href="#" target="_blank" class="text-white me-3"><i class="bi bi-instagram fs-4"></i></a>
+          <a href="#" target="_blank" class="text-white me-3"><i class="bi bi-facebook fs-4"></i></a>
+          <a href="#" target="_blank" class="text-white"><i class="bi bi-whatsapp fs-4"></i></a>
         </div>
       </div>
       <hr class="border-light" />
