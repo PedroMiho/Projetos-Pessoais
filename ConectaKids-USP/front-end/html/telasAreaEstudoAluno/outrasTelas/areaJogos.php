@@ -119,16 +119,16 @@ if (!estaLogado() || $_SESSION['usuario_tipo'] !== 'paciente') {
 
       <!-- Jogo 2 -->
       <div class="col-md-4">
-        <div class="card card-game text-center p-4 h-100" onclick="window.location.href='jogos/memoria.html'">
-          <div class="card-icon"><i class="bi bi-grid-3x3-gap-fill"></i></div>
-          <h5 class="fw-bold" style="color:#3e2723">Jogo da Memória</h5>
-          <p class="text-muted mb-0">Treine sua memória encontrando os pares corretos o mais rápido possível!</p>
+        <div class="card card-game text-center p-4 h-100" onclick="window.location.href='../jogosEducativos/operadores/operadores.html'">
+          <div class="card-icon"><i class="bi bi-plus-slash-minus"></i></i></div>
+          <h5 class="fw-bold" style="color:#3e2723">Operadores</h5>
+          <p class="text-muted mb-0">Identifique qual é o resultado a partir da operação mostrada</p>
         </div>
       </div>
 
       <!-- Jogo 3 -->
       <div class="col-md-4">
-        <div class="card card-game text-center p-4 h-100" onclick="window.location.href='jogos/numeros.html'">
+        <div class="card card-game text-center p-4 h-100" onclick="window.location.href='../jogosEducativos/aprendaNumeros/numeros.html'">
           <div class="card-icon"><i class="bi bi-123"></i></div>
           <h5 class="fw-bold" style="color:#3e2723">Aprendendo Números</h5>
           <p class="text-muted mb-0">Identifique números, conte objetos e aprenda brincando com a matemática!</p>

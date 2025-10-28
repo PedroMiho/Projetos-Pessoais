@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jogo — Adição e Subtração com Mãos</title>
+  <style>
+    body {
+      background-color: #fff8f5;
+      font-family: 'Poppins', sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #3e2723;
+      margin-bottom: 30px;
+    }
+
+    .game-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 30px;
+    }
+
+    .operation {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      font-size: 2rem;
+      font-weight: bold;
+      color: #3e2723;
+    }
+
+    .operation img {
+      width: 100px;
+      height: 100px;
+      object-fit: contain;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    .answers {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      background-color: #6d4c41;
+      color: white;
+      border: none;
+      padding: 15px 25px;
+      border-radius: 10px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .btn:hover {
+      background-color: #3e2723;
+      transform: scale(1.05);
+    }
+
+    #feedback {
+      font-weight: bold;
+      margin-top: 20px;
+      font-size: 1.3rem;
+    }
+
+    #next-btn {
+      display: none;
+      margin-top: 20px;
+      background-color: #4CAF50;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Jogo de Adição e Subtração com Mãos 🖐️</h1>
+  <div class="game-container">
+    <div class="operation" id="operation"></div>
+    <div class="answers" id="answers"></div>
+    <div id="feedback"></div>
+    <button id="next-btn" class="btn">Próximo ➜</button>
+  </div>
+
+  <script>
+    const hands = ["1.png","2.png","3.png","4.png","5.png"]; // imagens locais
+    const operationDiv = document.getElementById("operation");
+    const answersDiv = document.getElementById("answers");
+    const feedbackDiv = document.getElementById("feedback");
+    const nextBtn = document.getElementById("next-btn");
+
+    function newRound() {
+      operationDiv.innerHTML = "";
+      answersDiv.innerHTML = "";
+      feedbackDiv.textContent = "";
+      nextBtn.style.display = "none";
+
+      const num1 = Math.floor(Math.random() * 5) + 1;
+      const num2 = Math.floor(Math.random() * 5) + 1;
+      const isAddition = Math.random() < 0.5;
+
+      const result = isAddition ? num1 + num2 : num1 - num2;
+
+      if (result < 0 || result > 10) {
+        newRound();
+        return;
+      }
+
+      const img1 = document.createElement("img");
+      img1.src = hands[num1 - 1];
+      const img2 = document.createElement("img");
+      img2.src = hands[num2 - 1];
+
+      const operator = document.createElement("span");
+      operator.textContent = isAddition ? "+" : "-";
+
+      operationDiv.append(img1, operator, img2);
+
+      const correct = result;
+      let options = [correct];
+      while (options.length < 3) {
+        let random = Math.floor(Math.random() * 10);
+        if (!options.includes(random) && random >= 0) {
+          options.push(random);
+        }
+      }
+
+      options.sort(() => Math.random() - 0.5);
+
+      options.forEach(opt => {
+        const btn = document.createElement("button");
+        btn.classList.add("btn");
+        btn.textContent = opt;
+        btn.onclick = () => checkAnswer(opt, correct, btn);
+        answersDiv.appendChild(btn);
+      });
+    }
+
+    function checkAnswer(selected, correct, button) {
+      const allButtons = document.querySelectorAll(".answers button");
+      allButtons.forEach(b => b.disabled = true);
+
+      if (selected === correct) {
+        feedbackDiv.textContent = "🎉 Parabéns! Resposta correta!";
+        feedbackDiv.style.color = "green";
+        nextBtn.style.display = "inline-block";
+      } else {
+        feedbackDiv.textContent = "❌ Tente novamente!";
+        feedbackDiv.style.color = "red";
+        button.disabled = true;
+        allButtons.forEach(b => { if (b.textContent == correct) b.style.border = ""; });
+        allButtons.forEach(b => { b.disabled = false; });
+      }
+    }
+
+    nextBtn.onclick = newRound;
+
+    newRound();
+  </script>
+</body>
+</html>
